@@ -18,10 +18,19 @@
     </div>
   </dl>
   <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()">Deploy Wave</button>
+  <div class="palette">
+    <button type="button" data-testid="palette-pulse" (click)="overlay.selectType('pulse')">
+      Pulse 70
+    </button>
+    <button type="button" data-testid="palette-mortar" (click)="overlay.selectType('mortar')">
+      Mortar 110
+    </button>
+    <button type="button" data-testid="palette-cryo" (click)="overlay.selectType('cryo')">Cryo 90</button>
+  </div>
   <div class="board-stage">
     <div class="board-frame">
       <app-game-canvas />
-      <app-board-overlay />
+      <app-board-overlay #overlay />
     </div>
   </div>
 </section>

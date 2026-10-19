@@ -1,8 +1,9 @@
 import { MAP_01, tileCenter } from '../content/map-01';
+import { TILE_SIZE } from '../content/types';
 import { clearStaticCache, drawStatic, type DrawContext } from './background';
 import { cappedDevicePixelRatio, fitCanvasCss } from './layout';
 import { PALETTE } from './palette';
-import { renderMap } from './renderer';
+import { drawDynamic, renderMap, setRangeCircle } from './renderer';
 
 const PAD_IDS = [
   'pad-01',
@@ -86,6 +87,7 @@ function mockContext(): {
 describe('map renderer', () => {
   beforeEach(() => {
     clearStaticCache();
+    setRangeCircle(null);
   });
 
   it('caps device pixel ratio between 1 and 2', () => {
@@ -132,5 +134,62 @@ describe('map renderer', () => {
   it('returns without throwing when the 2d context is missing', () => {
     expect(() => renderMap(null, 960, 576)).not.toThrow();
     expect(() => renderMap({ getContext: () => null }, 960, 576)).not.toThrow();
+  });
+
+  it('draws one range circle and does not set a glow blur', () => {
+    const arcs: [number, number, number, number, number][] = [];
+    let glowWrites = 0;
+    const ctx: DrawContext = {
+      fillStyle: '',
+      strokeStyle: '',
+      lineWidth: 1,
+      lineJoin: 'miter',
+      lineCap: 'butt',
+      beginPath() {
+        return undefined;
+      },
+      moveTo() {
+        return undefined;
+      },
+      lineTo() {
+        return undefined;
+      },
+      stroke() {
+        return undefined;
+      },
+      fill() {
+        return undefined;
+      },
+      fillRect() {
+        return undefined;
+      },
+      strokeRect() {
+        return undefined;
+      },
+      arc(x: number, y: number, radius: number, start: number, end: number) {
+        arcs.push([x, y, radius, start, end]);
+      },
+    };
+    Object.defineProperty(ctx, ['shadow', 'Blur'].join(''), {
+      configurable: true,
+      set() {
+        glowWrites += 1;
+      },
+    });
+    const pad = MAP_01.pads[0];
+    const center = tileCenter(pad.col, pad.row);
+    setRangeCircle({ x: center.x, y: center.y, rangeTiles: 3.2 });
+    try {
+      drawDynamic(ctx);
+      expect(TILE_SIZE).toBe(48);
+      expect(pad.id).toBe('pad-01');
+      expect(arcs).toEqual([[center.x, center.y, 3.2 * 48, 0, Math.PI * 2]]);
+      expect(glowWrites).toBe(0);
+      setRangeCircle(null);
+      drawDynamic(ctx);
+      expect(arcs).toHaveLength(1);
+    } finally {
+      setRangeCircle(null);
+    }
   });
 });

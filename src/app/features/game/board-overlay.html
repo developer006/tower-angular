@@ -10,5 +10,33 @@
     [style.top]="pad.top"
     (click)="onPadClick(pad.id)"
     (keydown)="onPadKeydown($event, pad.id)"
+    (mouseenter)="onPadEnter(pad.id)"
+    (mouseleave)="onPadLeave(pad.id)"
+    (focus)="onPadFocus(pad.id)"
+    (blur)="onPadBlur(pad.id)"
   ></button>
+}
+@if (inspected(); as tower) {
+  <aside class="inspector" data-testid="tower-inspector">
+    <p>{{ tower.id }}</p>
+    <p>{{ tower.level }}</p>
+    <p>{{ tower.invested }}</p>
+    <button
+      type="button"
+      data-testid="upgrade-tower"
+      [disabled]="tower.level === 3"
+      (click)="onUpgrade()"
+    >
+      Upgrade
+    </button>
+    <button type="button" data-testid="sell-tower" (click)="onSell()">Sell</button>
+    <label>
+      Targeting
+      <select data-testid="targeting-mode" [value]="tower.targeting" (change)="onTargeting($event)">
+        <option value="first">first</option>
+        <option value="strongest">strongest</option>
+        <option value="closest">closest</option>
+      </select>
+    </label>
+  </aside>
 }
