@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-000 verified and pushed (`7185020`). Next brief: `plan/tasks/TASK-001-playwright.md`. Do not re-scaffold.
+> **Status:** TASK-001 merged and pushed (`9181a6f`, task commit `ae211f0`). Next brief: `plan/tasks/TASK-002-ci-lint.md`. Do not re-scaffold. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
