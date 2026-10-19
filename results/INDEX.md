@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-19 (TASK-013 merged)
+Last updated: 2026-10-19 (phase-1 tagged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -13,8 +13,8 @@ Last updated: 2026-10-19 (TASK-013 merged)
 | TASK-011 | Fixed-step loop, engine API, commands, seeded RNG + tests | 010 | done | `results/TASK-011-engine-loop.md` |
 | TASK-012 | Canvas renderer, static map layer, `/play` game page shell | 010, 011 | done | `results/TASK-012-renderer-shell.md` |
 | TASK-013 | E2E harness integration, deterministic smoke tests | 012, 001 | done | `results/TASK-013-e2e-harness.md` |
-| VERIFY-1 | Phase 1 verification | 013 | in-progress | `results/VERIFY-PHASE-1.md` |
-| TASK-020 | DOM board overlay, focus, build mode, keyboard | VERIFY-1 | pending | `results/TASK-020-board-overlay.md` |
+| VERIFY-1 | Phase 1 verification | 013 | done | `results/VERIFY-PHASE-1.md` |
+| TASK-020 | DOM board overlay, focus, build mode, keyboard | VERIFY-1 | in-progress | `results/TASK-020-board-overlay.md` |
 | TASK-021 | Placement validation, economy, HUD, error messages | 020 | pending | `results/TASK-021-placement-economy.md` |
 | TASK-022 | Tower palette, range preview, inspector, upgrade/sell/targeting | 021 | pending | `results/TASK-022-palette-inspector.md` |
 | TASK-023 | E2E specs: placement, invalid placement, upgrade/sell, keyboard | 022 | pending | `results/TASK-023-build-e2e.md` |
@@ -56,3 +56,4 @@ Last updated: 2026-10-19 (TASK-013 merged)
 - TASK-011 done: `916d99e feat(TASK-011): add fixed-step engine, commands, and seeded RNG`, merged as `c7d6e20`. Orchestrator re-ran `npm test` (32 passed), `npm run lint`, `npm run build`. `NO_CLOCK`. Loop remainder is corrected by 1 ULP; do not revert that line.
 - TASK-012 done: `64511e5 feat(TASK-012): add map canvas and play page shell`, merged as `7d77ee7`. Orchestrator re-ran `npm test` (37 passed), `npm run lint`, `npm run build`, `npm run e2e` (1 passed). `NO_ANGULAR` and `NO_SHADOW` in core render.
 - TASK-013 done: `a3b6ced feat(TASK-013): install the e2e harness and smoke spec`, merged as `2c3c833`. Orchestrator re-ran `npm test` (43 passed), lint, production build `PROD_ABSENT`, e2e build `E2E_HAS_TD`, `npm run e2e` (2 passed). `APP_CLEAN`.
+- VERIFY-1 done: `e589c70 docs(VERIFY-1): record phase 1 verification`, merged as `82f4f5d`. Tagged `phase-1`. Independent re-run matched the orchestrator: 43 tests, `PROD_ABSENT`, `E2E_HAS_TD`, Playwright 2 passed.

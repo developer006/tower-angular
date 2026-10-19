@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-013 merged (`2c3c833`). Next: `results/VERIFY-PHASE-1.md`. Do not start TASK-020 until that file has `status: pass`.
+> **Status:** Phase 1 tagged `phase-1` (`82f4f5d`). Next brief: `plan/tasks/TASK-020-board-overlay.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
