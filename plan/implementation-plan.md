@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** Phase 1 tagged `phase-1` (`82f4f5d`). Next brief: `plan/tasks/TASK-020-board-overlay.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-020 merged (`a68c2c5`). Next brief: `plan/tasks/TASK-021-placement-economy.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
