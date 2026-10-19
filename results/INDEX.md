@@ -2,14 +2,14 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-19 (TASK-001 merged)
+Last updated: 2026-10-19 (phase-0 tagged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
 | TASK-000 | Scaffold Angular 22 + Material + Playwright config/shell spec; confirm plan/results; commit | — | done | `results/TASK-000-scaffold.md` |
 | TASK-001 | E2E build + serve configuration, harness loader replacement, `start:e2e`, `http-server`; keep shell spec green | 000 | done | `results/TASK-001-playwright.md` |
-| TASK-002 | Lint/format (`angular-eslint`), npm scripts, CI workflow | 001 | in-progress | `results/TASK-002-ci-lint.md` |
-| TASK-010 | Domain types, content schemas, map data, path math + tests | 002 | pending | `results/TASK-010-content-path.md` |
+| TASK-002 | Lint/format (`angular-eslint`), npm scripts, CI workflow | 001 | done | `results/TASK-002-ci-lint.md` |
+| TASK-010 | Domain types, content schemas, map data, path math + tests | 002 | in-progress | `results/TASK-010-content-path.md` |
 | TASK-011 | Fixed-step loop, engine API, commands, seeded RNG + tests | 010 | pending | `results/TASK-011-engine-loop.md` |
 | TASK-012 | Canvas renderer, static map layer, `/play` game page shell | 010, 011 | pending | `results/TASK-012-renderer-shell.md` |
 | TASK-013 | E2E harness integration, deterministic smoke tests | 012, 001 | pending | `results/TASK-013-e2e-harness.md` |
@@ -51,3 +51,4 @@ Last updated: 2026-10-19 (TASK-001 merged)
 
 - TASK-000 done: `7185020 feat(TASK-000): scaffold Angular 22 workspace, Material, and Playwright`. Orchestrator re-ran `npm test` (3 passed), `npm run build` (`dist/tower-angular/browser`), `npm run e2e` (1 passed). `HEAD` matched `origin/main`.
 - TASK-001 done: `ae211f0 feat(TASK-001): add e2e harness loader replacement and start:e2e`, merged as `9181a6f`. Orchestrator re-ran `npm test` (3 passed), production build `PROD_ABSENT`, e2e build `E2E_HAS_TD`, `npm run e2e` (1 passed).
+- TASK-002 done: `9399349 chore(TASK-002): add angular-eslint, prettier compat, and CI`, merged as `8fefaab`. Tagged `phase-0`.
