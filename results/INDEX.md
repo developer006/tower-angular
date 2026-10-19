@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-19 (TASK-010 merged)
+Last updated: 2026-10-19 (TASK-011 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -10,8 +10,8 @@ Last updated: 2026-10-19 (TASK-010 merged)
 | TASK-001 | E2E build + serve configuration, harness loader replacement, `start:e2e`, `http-server`; keep shell spec green | 000 | done | `results/TASK-001-playwright.md` |
 | TASK-002 | Lint/format (`angular-eslint`), npm scripts, CI workflow | 001 | done | `results/TASK-002-ci-lint.md` |
 | TASK-010 | Domain types, content schemas, map data, path math + tests | 002 | done | `results/TASK-010-content-path.md` |
-| TASK-011 | Fixed-step loop, engine API, commands, seeded RNG + tests | 010 | in-progress | `results/TASK-011-engine-loop.md` |
-| TASK-012 | Canvas renderer, static map layer, `/play` game page shell | 010, 011 | pending | `results/TASK-012-renderer-shell.md` |
+| TASK-011 | Fixed-step loop, engine API, commands, seeded RNG + tests | 010 | done | `results/TASK-011-engine-loop.md` |
+| TASK-012 | Canvas renderer, static map layer, `/play` game page shell | 010, 011 | in-progress | `results/TASK-012-renderer-shell.md` |
 | TASK-013 | E2E harness integration, deterministic smoke tests | 012, 001 | pending | `results/TASK-013-e2e-harness.md` |
 | VERIFY-1 | Phase 1 verification | 013 | pending | `results/VERIFY-PHASE-1.md` |
 | TASK-020 | DOM board overlay, focus, build mode, keyboard | VERIFY-1 | pending | `results/TASK-020-board-overlay.md` |
@@ -53,3 +53,4 @@ Last updated: 2026-10-19 (TASK-010 merged)
 - TASK-001 done: `ae211f0 feat(TASK-001): add e2e harness loader replacement and start:e2e`, merged as `9181a6f`. Orchestrator re-ran `npm test` (3 passed), production build `PROD_ABSENT`, e2e build `E2E_HAS_TD`, `npm run e2e` (1 passed).
 - TASK-002 done: `9399349 chore(TASK-002): add angular-eslint, prettier compat, and CI`, merged as `8fefaab`. Tagged `phase-0`.
 - TASK-010 done: `5414bdf feat(TASK-010): add map, content tables, and path math`, merged as `7b5f9e3`. Orchestrator re-ran `npm test` (14 passed), `npm run lint`, `npm run build`. `NO_ANGULAR` in core content and game.
+- TASK-011 done: `916d99e feat(TASK-011): add fixed-step engine, commands, and seeded RNG`, merged as `c7d6e20`. Orchestrator re-ran `npm test` (32 passed), `npm run lint`, `npm run build`. `NO_CLOCK`. Loop remainder is corrected by 1 ULP; do not revert that line.

@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-010 merged (`7b5f9e3`). Next brief: `plan/tasks/TASK-011-engine-loop.md`. Do not re-scaffold. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-011 merged (`c7d6e20`). Next brief: `plan/tasks/TASK-012-renderer-shell.md`. Do not re-scaffold. Do not reverse the harness `fileReplacements`. Do not edit the loop accumulator correction.
 
 ## Current repository state
 
