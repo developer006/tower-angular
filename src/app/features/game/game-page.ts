@@ -2,11 +2,12 @@ import { Component, ElementRef, inject, OnDestroy, OnInit } from '@angular/core'
 import { renderMap } from '../../core/render/renderer';
 import { installHarness } from '../../core/testing/harness-loader';
 import { GameFacade } from '../../state/game-facade';
+import { BoardOverlay } from './board-overlay';
 import { GameCanvas } from './game-canvas';
 
 @Component({
   selector: 'app-game-page',
-  imports: [GameCanvas],
+  imports: [GameCanvas, BoardOverlay],
   templateUrl: './game-page.html',
   styleUrl: './game-page.css',
   providers: [GameFacade],
