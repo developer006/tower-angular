@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** ready for TASK-000. Review fix 3 is committed on `main` and not pushed. Do not push before the scaffold commit.
+> **Status:** TASK-000 verified and pushed (`7185020`). Next brief: `plan/tasks/TASK-001-playwright.md`. Do not re-scaffold.
 
 ## Current repository state
 
@@ -18,7 +18,7 @@ Verified 2026-10-19 on this host, not copied from an earlier draft:
 | Working tree | clean after the review-fix commit. Before TASK-000, `git status --short` must be empty. Do not describe this commit as unpushed-and-dirty. |
 | Node / npm | **v26.7.0**, npm 11.19.0. Angular 22 engines are `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`. A preflight that expects v24.x is wrong on this host. |
 | Shell | Hermes `terminal` is **git-bash**, not PowerShell. Task briefs use bash. Native tools (`node`, `npm`, `npx`, `git`) get `C:/` paths; do not pass `/c/...` to them. |
-| Angular workspace | **not scaffolded yet** — no `package.json`, no `src/` |
+| Angular workspace | scaffolded and pushed in `7185020`. Do not run `ng new` again. |
 | Plan folder | this document, `plan/design.md`, `plan/tasks/TASK-000-scaffold.md` |
 | Results hub | `results/README.md`, `results/INDEX.md`, `results/DECISIONS.md` |
 | `angular-scaffold` skill | **not installed** in this profile. Do not load it and do not install it during a task. The scaffold contract is in §0.10 and `plan/tasks/TASK-000-scaffold.md`. |

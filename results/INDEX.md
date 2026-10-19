@@ -2,12 +2,12 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-19 (plan review fix 3, committed)
+Last updated: 2026-10-19 (TASK-000 verified)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
-| TASK-000 | Scaffold Angular 22 + Material + Playwright config/shell spec; confirm plan/results; commit | — | pending | `results/TASK-000-scaffold.md` |
-| TASK-001 | E2E build + serve configuration, harness loader replacement, `start:e2e`, `http-server`; keep shell spec green | 000 | pending | `results/TASK-001-playwright.md` |
+| TASK-000 | Scaffold Angular 22 + Material + Playwright config/shell spec; confirm plan/results; commit | — | done | `results/TASK-000-scaffold.md` |
+| TASK-001 | E2E build + serve configuration, harness loader replacement, `start:e2e`, `http-server`; keep shell spec green | 000 | in-progress | `results/TASK-001-playwright.md` |
 | TASK-002 | Lint/format (`angular-eslint`), npm scripts, CI workflow | 001 | pending | `results/TASK-002-ci-lint.md` |
 | TASK-010 | Domain types, content schemas, map data, path math + tests | 002 | pending | `results/TASK-010-content-path.md` |
 | TASK-011 | Fixed-step loop, engine API, commands, seeded RNG + tests | 010 | pending | `results/TASK-011-engine-loop.md` |
@@ -46,3 +46,7 @@ Last updated: 2026-10-19 (plan review fix 3, committed)
 - TASK-002 depends on TASK-001 because both edit `package.json`; never run them in parallel.
 - Phase N+1 tasks depend on `VERIFY-N`; dispatch only after the verifier reports pass.
 - New tooling ownership: `http-server` (TASK-001), `angular-eslint` + Prettier (TASK-002), `tsx` (TASK-034), `@axe-core/playwright` (TASK-043).
+
+## Log
+
+- TASK-000 done: `7185020 feat(TASK-000): scaffold Angular 22 workspace, Material, and Playwright`. Orchestrator re-ran `npm test` (3 passed), `npm run build` (`dist/tower-angular/browser`), `npm run e2e` (1 passed). `HEAD` matched `origin/main`.

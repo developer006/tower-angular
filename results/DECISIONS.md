@@ -20,7 +20,7 @@ Orchestrator-owned. Add an entry whenever a cross-cutting decision is made.
 - **Harness safety:** `harness-loader.ts` is the no-op. The `e2e` build and serve configurations replace that file with `harness-loader.e2e.ts`. Production does not apply that replacement. Do not reverse it.
 - **Deployment:** GitHub Pages under `/tower-angular/`, `npm run build:pages` (build + `scripts/copy-404.mjs`), `404.html` fallback for deep links.
 - **Tooling:** `@axe-core/playwright` is owned by TASK-043 for the accessibility scan.
-- **Plan docs:** review fix 3 is committed on `main` and not pushed. TASK-000 pushes it with the scaffold. Do not amend to write a hash into a result file.
+- **Plan docs:** review fix 3 and the TASK-000 scaffold are on `origin/main` (`7185020`). Do not amend a task commit to write its hash into the result file. The orchestrator records the hash in `results/INDEX.md`.
 - **Plan review corrections:** TASK-002 depends on TASK-001; deployment is TASK-052 and final verification is TASK-053; TASK-032 owns Retry and TASK-040 owns Main Menu; `/play` lands in TASK-012. Review fix 3: bash briefs, Node 26, relative `ng new --directory`, harness replacement direction, Overlord spawns last, `status: pass` / `commit: pending`.
 - **Audio:** synthesized WebAudio SFX only; no external audio assets.
 - **Testing philosophy:** harness for setup/fast-forward/state assertions; real UI interaction for every user-facing behavior; only three visual snapshots.
