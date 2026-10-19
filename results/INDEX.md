@@ -17,7 +17,7 @@ Last updated: 2026-10-19 (TASK-022 merged)
 | TASK-020 | DOM board overlay, focus, build mode, keyboard | VERIFY-1 | done | `results/TASK-020-board-overlay.md` |
 | TASK-021 | Placement validation, economy, HUD, error messages | 020 | done | `results/TASK-021-placement-economy.md` |
 | TASK-022 | Tower palette, range preview, inspector, upgrade/sell/targeting | 021 | done | `results/TASK-022-palette-inspector.md` |
-| TASK-023 | E2E specs: placement, invalid placement, upgrade/sell, keyboard | 022 | in-progress | `results/TASK-023-build-e2e.md` |
+| TASK-023 | E2E specs: placement, invalid placement, upgrade/sell, keyboard | 022 | blocked | `results/TASK-023-build-e2e.md` |
 | VERIFY-2 | Phase 2 verification | 023 | pending | `results/VERIFY-PHASE-2.md` |
 | TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | pending | `results/TASK-030-enemy-movement.md` |
 | TASK-031 | Targeting, firing, projectiles, armor/slow + tests | 030 | pending | `results/TASK-031-combat.md` |
@@ -60,3 +60,4 @@ Last updated: 2026-10-19 (TASK-022 merged)
 - TASK-020 done: `784ac07 feat(TASK-020): add pad overlay and build-mode keyboard`, merged as `a68c2c5`. Orchestrator re-ran `npm test` (44 passed), lint, build, and `npm run e2e` (2 passed). Click does not place yet.
 - TASK-021 done: `b56cbc8 feat(TASK-021): place towers and show rejection reasons`, merged as `f2f8a77`. Orchestrator re-ran `npm test` (47 passed), lint, build, and `npm run e2e` (2 passed). Pulse place spends 70.
 - TASK-022 done: `bfaf8cb feat(TASK-022): add palette, range preview, and inspector`, merged as `835d7a2`. Orchestrator re-ran `npm test` (54 passed), lint, build, and `npm run e2e` (2 passed). Refund oracles 49 and 84 are in the spec. `NO_SHADOW`.
+- TASK-023 blocked before commit. Queued `placeTower` clears `placement-error` before `step()` rejects it. Fix is `plan/tasks/TASK-023-FIX.md`. Do not weaken the oracle to an empty string.

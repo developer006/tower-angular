@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-022 merged (`835d7a2`). Next brief: `plan/tasks/TASK-023-build-e2e.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-023 blocked before commit. Next brief: `plan/tasks/TASK-023-FIX.md`. Do not weaken the placement-error oracle.
 
 ## Current repository state
 
