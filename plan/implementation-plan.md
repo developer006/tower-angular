@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-021 merged (`f2f8a77`). Next brief: `plan/tasks/TASK-022-palette-inspector.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-022 merged (`835d7a2`). Next brief: `plan/tasks/TASK-023-build-e2e.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
