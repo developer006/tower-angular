@@ -2,20 +2,21 @@
   <dl class="hud">
     <div>
       <dt>Integrity</dt>
-      <dd data-testid="hud-integrity">20</dd>
+      <dd data-testid="hud-integrity">{{ facade.integrity() }}</dd>
     </div>
     <div>
       <dt>Gold</dt>
-      <dd data-testid="hud-gold">150</dd>
+      <dd data-testid="hud-gold">{{ facade.gold() }}</dd>
     </div>
     <div>
       <dt>Wave</dt>
-      <dd data-testid="hud-wave">1</dd>
+      <dd data-testid="hud-wave">{{ facade.wave() }}</dd>
     </div>
     <div>
       <dt>Score</dt>
-      <dd data-testid="hud-score">0</dd>
+      <dd data-testid="hud-score">{{ facade.score() }}</dd>
     </div>
   </dl>
+  <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()">Deploy Wave</button>
   <app-game-canvas />
 </section>

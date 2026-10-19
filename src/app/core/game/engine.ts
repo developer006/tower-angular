@@ -76,6 +76,24 @@ export class GameEngine {
     this.state = createInitialState(seed);
   }
 
+  configureScenario(options: {
+    seed: number;
+    integrity?: number;
+    wave?: number;
+    gold?: number;
+  }): void {
+    this.reset(options.seed);
+    if (options.integrity !== undefined) {
+      this.state.integrity = options.integrity;
+    }
+    if (options.wave !== undefined) {
+      this.state.wave = options.wave;
+    }
+    if (options.gold !== undefined) {
+      this.state.gold = options.gold;
+    }
+  }
+
   dispatch(command: Command): CommandResult {
     if (command.type === 'reset') {
       this.reset(command.seed);
