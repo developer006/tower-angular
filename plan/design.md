@@ -14,7 +14,7 @@ A neon vector sci-fi tower defense game. The player defends a data core from cor
 4. Towers acquire targets, fire, and earn bounty gold for kills.
 5. Leaks reduce integrity.
 6. Clear the wave, collect a bonus, invest, repeat.
-7. Survive wave 10 and kill the boss to win; reach 0 integrity to lose.
+7. Clear wave 10 (the Overlord is the final spawn) with integrity above 0 to win; reach 0 integrity to lose.
 
 Building is allowed during a wave. Pause freezes simulation but not the build UI.
 
@@ -35,7 +35,7 @@ Building is allowed during a wave. Pause freezes simulation but not the build UI
 | Mortar | 110 | 45 splash | 0.55/s | 4.0 tiles | Anti-clump, anti-armor |
 | Cryo | 90 | 5 | 1.2/s | 3.0 tiles | 40% slow for 1.5 s |
 
-Three upgrade levels. Targeting modes: First, Strongest, Closest (default First). Armor is flat reduction per hit (minimum 1 damage). Slow is strongest-wins with duration refresh.
+Three upgrade levels. Costs: L2 = 70% and L3 = 100% of base, rounded to 5. L2/L3 multipliers: x1.30/x1.60 damage, x1.10/x1.20 rate, x1.08/x1.16 range. Mortar splash 1.0 -> 1.15 -> 1.30 tiles; Cryo slow 40% -> 45% -> 50%, duration 1.5 -> 1.7 -> 1.9 s. Sell refunds 70% of total invested, rounded down. Targeting modes: First (furthest along path), Strongest (highest current HP), Closest (smallest distance); default First. Armor is flat reduction per hit (minimum 1 damage). Slow is strongest-wins with duration refresh; boss resistance halves strength only. Mortar splash has no falloff; projectiles home and expire if the target dies first.
 
 ## Enemies
 
@@ -62,24 +62,25 @@ Boss has 50% slow resistance.
 | 7 | 20 Swarm, 4 Tanks |
 | 8 | 12 Runners, 8 Drones, 4 Tanks |
 | 9 | 8 Tanks, 20 Swarm, 10 Runners |
-| 10 | Overlord, 10 Drones, 6 Runners, 4 Tanks |
+| 10 | 10 Drones, 6 Runners, 4 Tanks, Overlord |
 
-Spawn intervals and group delays live in data. Numbers are starting points for the balance simulator.
+Spawn intervals and group delays live in data. Table order is spawn order: each comma-separated run is one group, and the Overlord group is last. Numbers are starting points for the balance simulator.
 
 ## Economy, score, end states
 
 - Wave-clear bonus: `25 + 5 x wave`; plus kill bounties.
-- Score: `kills x 10 + wavesReached x 100 + remainingLives x 25`.
-- Victory when wave 10 is cleared; defeat at 0 integrity.
-- Best score, best wave, and settings persist in `localStorage` under `core-defense:v1`.
-- Results overlay: waves, kills, integrity, score, best score, Retry, Main Menu.
+- Score: `kills x 10 + wavesCleared x 100 + remainingIntegrity x 25`, computed once at the end. HUD score stays 0 until then. Defeat during wave N scores N-1 cleared waves. `bestWave` is the highest wave started.
+- Settings persist under `core-defense:v1` as `{ bestScore, bestWave, soundMuted, reducedMotion, colorblind }`. Theme is the separate key `theme`. `SettingsStore.load()` runs from the constructor.
+- Victory when wave 10 is cleared (all spawned enemies killed or leaked) with integrity above 0; defeat at 0 integrity. A leaked Overlord counts as a normal leak.
+- Results overlay: waves cleared, kills, integrity, score, best score, Retry (TASK-032), Main Menu (TASK-040), best score (TASK-041).
 
 ## Engine
 
-- Fixed 60 Hz timestep with accumulator; clamp frame delta to 0.25 s; max 10 steps per frame; 2x speed feeds the accumulator at double rate.
+- Fixed 60 Hz timestep. `DT` is exactly `1 / 60`. Clamp frame delta to 0.25 s; max 10 steps per frame. Pause discards frame time instead of accumulating it. `F` toggles 1x and 2x only.
 - Deterministic: integer ticks, no wall clock in simulation, authored waves, seeded PRNG for cosmetics only, stable system order.
 - State: tick, phase, gold, integrity, wave, score, towers, enemies, projectiles, effects, spawn queue, RNG.
 - Commands: placeTower, upgradeTower, sellTower, setTargeting, startWave, reset.
+- While paused, build/economy/targeting commands apply immediately without stepping the simulation; `startWave` is ignored while paused.
 - Tick order: commands -> spawn -> slow effects -> movement/leaks -> targeting -> fire -> projectiles -> damage/deaths -> wave state -> cosmetic effects.
 - Path: precomputed segment lengths and cumulative distance; enemies store distanceAlongPath.
 - Targeting: distance-squared checks; no spatial hash needed at 20 towers x 150 enemies.
@@ -88,15 +89,15 @@ Spawn intervals and group delays live in data. Numbers are starting points for t
 ## Angular integration
 
 - Angular 22.2.x (22.2.3 verified), standalone, zoneless, native Vitest, Angular Material 22 + CDK + animations for chrome, angular-eslint 22 + Prettier, Playwright for e2e.
-- Engine is framework-free; `GameFacade` owns engine/loop/renderer and exposes signals.
+- Engine is framework-free; `GameFacade` owns engine, loop, and command dispatch and exposes signals; `GameCanvasComponent` owns the canvas and renderer.
 - HUD snapshots at 10 Hz; entity positions never go through change detection.
 - `GameCanvasComponent` renders; `BoardOverlayComponent` provides transparent DOM buttons over pads/towers for mouse, keyboard, accessibility, and stable test selectors.
 - Material theme service toggles prebuilt themes in `public/assets/themes/`; default dark; theme preference under `theme`, game settings under `core-defense:v1`. Relative asset URLs for subpath builds.
-- Production builds replace `harness-loader.ts` with a no-op, so the e2e harness (`window.__TD__`) is absent from production bundles.
+- Production `harness-loader.ts` is a no-op. The `e2e` configuration replaces it with `harness-loader.e2e.ts`. Do not reverse that replacement. `window.__TD__` is absent from production bundles.
 
 ## UX and accessibility
 
 - HUD: integrity, gold, wave, score, pause, speed, sound.
-- Keys: 1/2/3 select tower, Space pause, F speed, Esc cancel, Tab cycles pads/towers.
+- Keys: 1/2/3 select tower, Space pause, F speed, Esc cancel, Tab cycles pads/towers. Deploy Wave is disabled while paused; build/sell/upgrade/targeting stay enabled.
 - `aria-live` announcements for wave start/clear, leak, victory, defeat.
 - Colorblind-safe palette with distinct shapes; reduced-motion option.

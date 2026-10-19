@@ -24,15 +24,16 @@ Subagents must not edit another task's result, `INDEX.md`, or `DECISIONS.md`.
 
 Target <= 120 lines. Include:
 
-1. **Status** — `done`, `partial`, or `blocked`.
-2. **Branch / commit** — `task/TASK-###-slug @ abc1234`.
-3. **Summary** — 3-6 bullets: what changed and why.
-4. **Files changed** — path plus one-line purpose.
-5. **Tests and evidence** — exact commands and pass/fail counts; link to `evidence/` files instead of pasting logs.
-6. **Acceptance criteria** — checklist, with reasons for unmet items.
-7. **Decisions / assumptions** — anything the orchestrator or next task must know.
-8. **Open issues / risks** — known limitations or "none".
-9. **Handoff for next task** — exact files to read, interfaces to preserve, commands to run.
+1. **Status** — the first line is `status: pass` or `status: blocked`. Do not write `done`.
+2. **Commit** — `commit: pending`. The file is inside the commit, so the hash does not exist yet. Do not amend.
+3. **Verify** — the command the orchestrator re-runs, and `verify_exit: 0` when it passed.
+4. **Summary** — 3-6 bullets: what changed and why.
+5. **Files changed** — path plus one-line purpose.
+6. **Tests and evidence** — exact commands and pass/fail counts; link to `evidence/` files instead of pasting logs.
+7. **Acceptance criteria** — checklist, with reasons for unmet items.
+8. **Decisions / assumptions** — anything the orchestrator or next task must know.
+9. **Open issues / risks** — known limitations or "none".
+10. **Handoff for next task** — exact files to read, interfaces to preserve, commands to run.
 
 ## Blocked tasks
 
