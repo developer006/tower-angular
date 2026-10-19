@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-012 merged (`7d77ee7`). Next brief: `plan/tasks/TASK-013-e2e-harness.md`. Do not reverse the harness `fileReplacements`. Do not edit the loop accumulator correction.
+> **Status:** TASK-013 merged (`2c3c833`). Next: `results/VERIFY-PHASE-1.md`. Do not start TASK-020 until that file has `status: pass`.
 
 ## Current repository state
 
