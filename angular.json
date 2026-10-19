@@ -48,6 +48,17 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "e2e": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/app/core/testing/harness-loader.ts",
+                  "with": "src/app/core/testing/harness-loader.e2e.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -60,6 +71,9 @@
             },
             "development": {
               "buildTarget": "tower-angular:build:development"
+            },
+            "e2e": {
+              "buildTarget": "tower-angular:build:e2e"
             }
           },
           "defaultConfiguration": "development"
