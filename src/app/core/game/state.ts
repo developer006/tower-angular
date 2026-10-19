@@ -1,0 +1,90 @@
+import type { EnemyType, SpawnEvent, TargetingMode, TowerType } from '../content/types';
+
+export type Phase = 'build' | 'wave' | 'victory' | 'defeat';
+
+export interface TowerState {
+  id: string;
+  towerType: TowerType;
+  padId: string;
+  level: 1 | 2 | 3;
+  invested: number;
+  targeting: TargetingMode;
+  cooldown: number;
+}
+
+export interface EnemyState {
+  id: string;
+  enemyType: EnemyType;
+  hp: number;
+  maxHp: number;
+  distanceAlongPath: number;
+  alive: boolean;
+  slowStrength: number;
+  slowRemaining: number;
+}
+
+export interface ProjectileState {
+  id: string;
+  towerId: string;
+  targetId: string;
+  x: number;
+  y: number;
+  damage: number;
+  splashRadius: number;
+}
+
+export interface EffectState {
+  id: string;
+  kind: string;
+  x: number;
+  y: number;
+  remaining: number;
+}
+
+export interface GameState {
+  tick: number;
+  phase: Phase;
+  gold: number;
+  integrity: number;
+  wave: number;
+  score: number;
+  towers: TowerState[];
+  enemies: EnemyState[];
+  projectiles: ProjectileState[];
+  effects: EffectState[];
+  spawnQueue: SpawnEvent[];
+  rngState: number;
+  paused: boolean;
+  speed: 1 | 2;
+  nextTowerId: number;
+  nextEnemyId: number;
+  nextProjectileId: number;
+  history: Command[];
+  pending: Command[];
+}
+
+export type Command =
+  | { type: 'placeTower'; towerType: TowerType; padId: string }
+  | { type: 'upgradeTower'; towerId: string }
+  | { type: 'sellTower'; towerId: string }
+  | { type: 'setTargeting'; towerId: string; mode: TargetingMode }
+  | { type: 'startWave' }
+  | { type: 'reset'; seed: number };
+
+export type RejectReason =
+  | 'unknown-pad'
+  | 'unknown-tower'
+  | 'occupied'
+  | 'insufficient-gold'
+  | 'missing-tower'
+  | 'max-level'
+  | 'bad-targeting'
+  | 'paused'
+  | 'wave-active'
+  | 'ended';
+
+export interface CommandResult {
+  ok: boolean;
+  reason?: RejectReason;
+  queued?: boolean;
+}
