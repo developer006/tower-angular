@@ -12,13 +12,13 @@
 |---|---|
 | Project folder | `C:\wrk\tower-angular` exists |
 | Git | initialized on `main`, remote `origin` configured |
-| Commits | `2db0cdb first commit` (README only) |
+| Commits | `2db0cdb first commit`, `9a11d6e docs: plan + results hub` (local, not yet pushed) |
 | Node / npm | Node 24.20.0, npm 11.19.0 |
 | Angular workspace | **not scaffolded yet** — no `package.json`, no `src/` |
 | Plan folder | this document + `plan/design.md` |
 | Results hub | `results/README.md`, `results/INDEX.md`, `results/DECISIONS.md` |
 
-TASK-000 is therefore the scaffold task. It works in a sibling directory (Angular CLI refuses non-empty targets), moves the generated files into this repo without overwriting `.git`, and commits.
+TASK-000 is therefore the scaffold task. It works in a sibling directory (Angular CLI refuses non-empty targets), moves the generated files into this repo without overwriting `.git`, commits, and pushes.
 
 ---
 
@@ -276,16 +276,19 @@ npx --yes @angular/cli@22 new tower-angular `
   --ai-config=none `
   --defaults
 
-# If npm install fails with EALLOWSCRIPTS / "--allow-scripts is not allowed":
-#   npm install --ignore-scripts
+# If the CLI install fails with EALLOWSCRIPTS, continue: step 3 installs at the repo root.
 
-# 2. Move generated files into the existing repo (keep .git and README)
+# 2. Move generated files into the existing repo.
+#    Skip node_modules and README.md; .git stays untouched.
 Get-ChildItem C:\wrk\tower-angular-scaffold -Force |
-  Where-Object { $_.Name -ne 'README.md' } |
+  Where-Object { $_.Name -notin @('README.md', 'node_modules') } |
   Move-Item -Destination C:\wrk\tower-angular -Force
+Remove-Item C:\wrk\tower-angular-scaffold -Recurse -Force
 
-# 3. Install UI + test dependencies at the repo root
+# 3. Install dependencies at the repo root
+#    If npm fails with EALLOWSCRIPTS, retry: npm install --ignore-scripts
 Set-Location C:\wrk\tower-angular
+npm install
 npm install "@angular/material@22" "@angular/cdk@22" "@angular/animations@22"
 npm install -D "@playwright/test@1"
 npx playwright install chromium
@@ -293,11 +296,19 @@ npx playwright install chromium
 # 4. Prebuilt Material themes -> public/assets/themes (relative URLs for subpath builds)
 node -e "const fs=require('node:fs');fs.mkdirSync('public/assets/themes',{recursive:true});for(const t of ['deeppurple-amber','purple-green'])fs.copyFileSync('node_modules/@angular/material/prebuilt-themes/'+t+'.css','public/assets/themes/'+t+'.css')"
 
-# 5. Verify and commit
+# 5. Line endings
+Set-Content -LiteralPath .gitattributes -Value "* text=auto`n" -Encoding ascii
+
+# 6. Theme service, shell, rewritten app.spec.ts, playwright.config.ts,
+#    e2e/specs/shell.spec.ts, README update (follow the angular-scaffold skill).
+
+# 7. Verify and commit
 npm test
 npm run build
+npm run e2e
 git add -A
 git commit -m "feat(TASK-000): scaffold Angular 22 workspace, Material, and Playwright"
+git push origin main
 ```
 
 Deviations from the blank-shell baseline, on purpose:
@@ -307,6 +318,7 @@ Deviations from the blank-shell baseline, on purpose:
 - `zone.js` must not be present (`--zoneless` + signals).
 - Keep theme/favicon URLs relative (`assets/...`), never absolute.
 - TASK-000 subagent should load the `angular-scaffold` skill before scaffolding.
+- TASK-000 creates `playwright.config.ts` and `e2e/specs/shell.spec.ts` against the default `npm run start`. TASK-001 adds the `e2e` build configuration, the harness loader replacement, and switches the Playwright `webServer` to `npm run start:e2e`.
 
 For GitHub Pages builds, use `--base-href=/tower-angular/` and a `404.html` fallback for deep links (TASK-053).
 
@@ -473,7 +485,7 @@ Targeting is `towers x enemies` distance-squared checks each tick. With 20 tower
 - Angular 22.2.3, standalone components, **zoneless**, native Vitest via `@angular/build:unit-test`.
 - Angular Material 22 + CDK + animations for UI chrome: toolbar, buttons, dialogs, sliders, tooltips, snackbar.
 - Canvas remains custom; Material does not render the board.
-- Theme: prebuilt Material themes in `public/assets/themes/`, a `ThemeService` toggling `<link id="theme-link">` between `deeppurple-amber` (light) and `purple-green` (dark). Default is **dark**. Preferences persist with the game settings.
+- Theme: prebuilt Material themes in `public/assets/themes/`, a `ThemeService` toggling `<link id="theme-link">` between `deeppurple-amber` (light) and `purple-green` (dark). Default is **dark**. The theme preference persists under the `theme` key; game settings persist under `core-defense:v1`.
 - `provideBrowserGlobalErrorListeners()` and `provideAnimationsAsync()` in `app.config.ts`. No date adapter (no date components).
 - `GameEngine` has no Angular imports. It exposes `dispatch`, `step`, `getState`, and `getSnapshot`.
 - `GameFacade` is an Angular service that owns the engine, loop, renderer, and command dispatch.
@@ -504,7 +516,7 @@ C:\wrk\tower-angular\
       systems\     spawn, movement, targeting, firing, projectiles,
                    damage, economy, wave, effects
       render\      renderer.ts, background.ts, entities.ts, theme.ts
-      testing\     e2e-harness.ts
+      testing\     e2e-harness.ts, harness-loader.ts, harness-loader.e2e.ts
       theme.service.ts
     features\
       game\        game-page, game-canvas, board-overlay, hud,
@@ -517,13 +529,13 @@ C:\wrk\tower-angular\
   e2e\
     fixtures\game.fixture.ts
     pages\game.page.ts
-    specs\*.spec.ts
-    shell.spec.ts
+    specs\  shell.spec.ts, smoke.spec.ts, *.spec.ts
   public\assets\themes\  deeppurple-amber.css, purple-green.css
   scripts\balance-sim.ts, copy-404.mjs
   plan\
   results\
   playwright.config.ts
+  .gitattributes
   .github\workflows\ci.yml, deploy-pages.yml
 ```
 
@@ -535,17 +547,18 @@ Generated file naming follows Angular 22 conventions: `app.ts`, `app.html`, `app
 
 ### 4.1 Deterministic test harness
 
-Add a separate Angular **`e2e` build configuration** with `environment.e2e.ts`. It installs a test-only `window.__TD__` API; the harness is dynamically imported and absent from production builds.
+Add a separate Angular **`e2e` build configuration** that replaces `src/app/core/testing/harness-loader.ts` with `harness-loader.e2e.ts` via `fileReplacements`. `GamePageComponent` calls `installHarness(facade)` once; production builds use the no-op loader, so the harness module is never referenced by the production bundle and `window.__TD__` cannot appear there.
 
 Harness methods:
 
 - `getState()` — read-only UI snapshot.
-- `getFullState()` — full simulation state for assertions.
-- `stepTicks(n)` — fast-forward the simulation without real time.
-- `setManualMode(enabled)` — stop/start the rAF loop.
-- `dispatch(command)` — test setup and edge cases.
-- `reset({ seed, lives, wave })` — create specific scenarios quickly.
+- `getFullState()` — deep-cloned simulation state (`structuredClone`) for assertions.
+- `stepTicks(n)` — step the engine `n` fixed ticks and render synchronously.
+- `setManualMode(enabled)` — when enabled, rAF callbacks are no-ops; tests drive time explicitly.
+- `dispatch(command)` — test setup and edge cases; returns the command result.
+- `reset({ seed, lives, wave, gold })` — test-only scenario setup; `wave` is the 1-based next wave.
 - `getMap()` — pad IDs, path points, tile positions.
+- `ready` — true once the game page has initialized and the harness is installed.
 
 Use the harness for **setup, fast-forwarding, and state assertions**, but drive every user-facing behavior through real UI interactions at least once.
 
@@ -553,7 +566,8 @@ Playwright's clock also mocks `requestAnimationFrame` and `performance`:
 
 ```ts
 await page.clock.install();
-await page.goto('/play?e2e=1');
+await page.goto('/play');
+await page.waitForFunction(() => window.__TD__?.ready === true);
 await page.clock.runFor(1000);
 ```
 
@@ -586,14 +600,15 @@ Manual stepping is the default for speed and exactness; `page.clock` is used for
 
 ### 4.4 Playwright config and scripts
 
-`playwright.config.ts` follows the Angular 22 baseline: `testDir: './e2e'`, `fullyParallel: true`, `forbidOnly` on CI, `retries: 2` on CI, `workers: 1` on CI, `reporter: 'list'`, `baseURL: 'http://localhost:4200'`, `trace: 'on-first-retry'`, Chromium project, and a `webServer` running `npm run start` with `reuseExistingServer: !process.env.CI` and a 120 s timeout.
+`playwright.config.ts` follows the Angular 22 baseline: `testDir: './e2e'`, `fullyParallel: true`, `forbidOnly` on CI, `retries: 2` on CI, `workers: 1` on CI, `reporter: 'list'`, `baseURL: 'http://localhost:4200'`, `trace: 'on-first-retry'`, Chromium project, and a `webServer` with `reuseExistingServer: !process.env.CI` and a 120 s timeout. TASK-000 creates the config against the default `npm run start`; TASK-001 switches the command to `npm run start:e2e` when the harness loader replacement lands.
 
 ```json
 {
   "scripts": {
     "start": "ng serve",
+    "start:e2e": "ng serve --configuration e2e",
     "build": "ng build",
-    "build:pages": "ng build --base-href=/tower-angular/",
+    "build:pages": "ng build --base-href=/tower-angular/ && node scripts/copy-404.mjs",
     "test": "ng test --no-watch",
     "test:watch": "ng test --watch",
     "lint": "ng lint",
@@ -606,6 +621,13 @@ Manual stepping is the default for speed and exactness; `page.clock` is used for
 }
 ```
 
+Dependency ownership for scripts:
+
+- `@playwright/test` — TASK-000.
+- `http-server` — TASK-001 (used by `e2e:serve` in TASK-051/053 smoke checks).
+- `angular-eslint@22` + `prettier` + `eslint-config-prettier` — TASK-002 (`ng add angular-eslint@22 --skip-confirmation`, verified to ship a schematics collection).
+- `tsx` — TASK-034 (balance simulator).
+
 CI (`.github/workflows/ci.yml`): checkout, Node 24, `npm ci`, `npm run lint`, `npm test`, `npm run build`, `npx playwright install --with-deps chromium`, `npm run e2e`, upload traces/screenshots on failure. Start with Chromium only; add Firefox/WebKit after v1.
 
 ---
@@ -616,33 +638,33 @@ Every row is a **separate subagent session**. The orchestrator creates the brief
 
 | ID | Task | Depends on | Agent | Result file |
 |---|---|---|---|---|
-| TASK-000 | Scaffold Angular 22 + Material + Playwright; verify plan/results structure; commit | — | general | `results/TASK-000-scaffold.md` |
-| TASK-001 | Playwright config, e2e build config, harness stub, shell/smoke specs | 000 | general | `results/TASK-001-playwright.md` |
-| TASK-002 | Lint/format, npm scripts, CI workflow | 000 | general | `results/TASK-002-ci-lint.md` |
+| TASK-000 | Scaffold Angular 22 + Material + Playwright config/shell spec; confirm plan/results; commit | — | general | `results/TASK-000-scaffold.md` |
+| TASK-001 | E2E build config + harness loader replacement, `start:e2e`, game smoke spec, `http-server` | 000 | general | `results/TASK-001-playwright.md` |
+| TASK-002 | Lint/format (`ng add angular-eslint@22`), npm scripts, CI workflow | 000 | general | `results/TASK-002-ci-lint.md` |
 | TASK-010 | Domain types, content schemas, map data, path math + unit tests | 002 | general | `results/TASK-010-content-path.md` |
 | TASK-011 | Fixed-step loop, engine API, command validation, seeded RNG + unit tests | 010 | general | `results/TASK-011-engine-loop.md` |
 | TASK-012 | Canvas renderer, static map layer, game page shell, responsive canvas | 010, 011 | general | `results/TASK-012-renderer-shell.md` |
 | TASK-013 | E2E harness integration, deterministic smoke tests | 012, 001 | general | `results/TASK-013-e2e-harness.md` |
 | VERIFY-1 | Independent phase 1 verification | 013 | general (read-only) | `results/VERIFY-PHASE-1.md` |
-| TASK-020 | DOM board overlay, pad/tower focus, build mode, keyboard | 013 | general | `results/TASK-020-board-overlay.md` |
+| TASK-020 | DOM board overlay, pad/tower focus, build mode, keyboard | VERIFY-1 | general | `results/TASK-020-board-overlay.md` |
 | TASK-021 | Placement validation, economy, HUD, error messages | 020 | general | `results/TASK-021-placement-economy.md` |
 | TASK-022 | Tower palette, range preview, inspector, upgrade/sell/targeting | 021 | general | `results/TASK-022-palette-inspector.md` |
 | TASK-023 | Playwright specs: placement, invalid placement, upgrade/sell, keyboard | 022 | general | `results/TASK-023-build-e2e.md` |
 | VERIFY-2 | Independent phase 2 verification | 023 | general (read-only) | `results/VERIFY-PHASE-2.md` |
-| TASK-030 | Enemy content, spawn queue, path movement, leak detection | 022 | general | `results/TASK-030-enemy-movement.md` |
+| TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | general | `results/TASK-030-enemy-movement.md` |
 | TASK-031 | Targeting, firing, projectiles, armor/slow + unit tests | 030 | general | `results/TASK-031-combat.md` |
 | TASK-032 | 10-wave data, wave state machine, victory/defeat, wave preview | 031 | general | `results/TASK-032-waves-endstates.md` |
 | TASK-033 | Playwright specs: combat, leak, defeat, victory | 032 | general | `results/TASK-033-combat-e2e.md` |
 | TASK-034 | Headless balance simulator, reference strategies, integration tests | 033 | general | `results/TASK-034-balance-sim.md` |
 | TASK-035 | Balance pass and content tuning | 034 | general | `results/TASK-035-balance-tune.md` |
 | VERIFY-3 | Independent phase 3 verification | 035 | general (read-only) | `results/VERIFY-PHASE-3.md` |
-| TASK-040 | Router, main menu, results overlay, restart flow | 035 | general | `results/TASK-040-menu-results.md` |
+| TASK-040 | Router, main menu, results overlay, restart flow | VERIFY-3 | general | `results/TASK-040-menu-results.md` |
 | TASK-041 | Pause/speed, visibility handling, persistence, settings, corrupted storage fallback | 040 | general | `results/TASK-041-pause-persistence.md` |
 | TASK-042 | Synth SFX, visual effects, reduced motion, colorblind palette | 041 | general | `results/TASK-042-audio-polish.md` |
 | TASK-043 | Accessibility pass: aria-live, focus, keyboard, axe scan | 042 | general | `results/TASK-043-accessibility.md` |
 | TASK-044 | Playwright specs: pause/speed, persistence, accessibility | 043 | general | `results/TASK-044-polish-e2e.md` |
 | VERIFY-4 | Independent phase 4 verification | 044 | general (read-only) | `results/VERIFY-PHASE-4.md` |
-| TASK-050 | Visual regression spec and CI baselines | 044 | general | `results/TASK-050-visual-regression.md` |
+| TASK-050 | Visual regression spec and CI baselines | VERIFY-4 | general | `results/TASK-050-visual-regression.md` |
 | TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | general | `results/TASK-051-docs-release.md` |
 | TASK-052 | Final independent verification and v1 acceptance report | 051 | general (read-only) | `results/VERIFY-FINAL.md` |
 | TASK-053 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 052 | general | `results/TASK-053-github-pages.md` |
@@ -655,6 +677,8 @@ Every row is a **separate subagent session**. The orchestrator creates the brief
 - Do not pre-create all task briefs; create each after its dependencies are verified and merged.
 - Sequential execution is the default. Parallel execution only for disjoint files with fixed interfaces; use git worktrees and merge one at a time.
 - Subagents must not edit `plan/` or `results/INDEX.md`.
+- TASK-001 and TASK-002 both edit `package.json`; run them sequentially in ID order, never in parallel.
+- Phase N+1 tasks depend on `VERIFY-N`; do not dispatch them until the verifier reports pass.
 
 ---
 
@@ -663,11 +687,12 @@ Every row is a **separate subagent session**. The orchestrator creates the brief
 ### Phase 0 — Setup
 
 - Angular 22.2.3 workspace scaffolded in `C:\wrk\tower-angular`; `npx ng version` confirms it.
-- `npm test` passes with `--no-watch`; `npm run build` passes.
-- Material 22 + CDK + animations installed; prebuilt themes in `public/assets/themes/`.
-- `@playwright/test` installed; Chromium downloaded; shell spec passes.
+- `npm test` passes with `--no-watch`; `npm run build` passes; `npm run e2e` passes the shell spec in `e2e/specs/shell.spec.ts`.
+- Material 22 + CDK + animations installed; prebuilt themes in `public/assets/themes/`; theme toggle works.
+- `@playwright/test` installed; Chromium downloaded.
 - `package.json` has no `zone.js`, no Analog packages; all Angular packages on major 22.
-- `plan/` and `results/` structure present; README updated; initial scaffold commit on `main` pushed to `origin`.
+- `.gitattributes` exists; `.gitignore` covers build output, Playwright artifacts, and `results/evidence/`.
+- `plan/` and `results/` structure present; README is valid Markdown with setup commands; initial scaffold commit pushed to `origin`.
 
 ### Phase 1 — Engine foundation
 
@@ -731,7 +756,7 @@ Use the engine itself as a headless simulator:
 
 | Risk | Mitigation |
 |---|---|
-| `ng new` refuses the non-empty repo | Scaffold in `C:\wrk\tower-angular-scaffold` and move files; keep `.git` |
+| `ng new` refuses the non-empty repo | Scaffold in `C:\wrk\tower-angular-scaffold`, move source files only (skip `node_modules`), run `npm install` at the repo root, keep `.git` |
 | Canvas tests become flaky | DOM overlay for interactions; assert simulation/HUD state; 3 visual snapshots |
 | Balance takes too long | Headless simulator, centralized content, reference invariants |
 | Angular change detection hurts frame rate | Zoneless + signals + 10 Hz HUD snapshots + rAF outside change detection |
@@ -765,12 +790,14 @@ Recorded in `results/DECISIONS.md`:
 - Project folder: `C:\wrk\tower-angular`; remote `origin` on GitHub; branch `main`.
 - Package manager: **npm**.
 - `results/` is committed for traceability; `results/evidence/` is gitignored.
-- Scaffold baseline: Angular 22.2.3, standalone, zoneless, native Vitest, Material 22, Playwright 1.x, Chromium.
+- Scaffold baseline: Angular 22.2.3, standalone, zoneless, native Vitest, Material 22 + CDK + animations, angular-eslint 22 + Prettier, Playwright 1.x, Chromium.
 - Routing enabled (menu + game routes), deviating from the blank-shell baseline.
-- Dark Material theme by default; light theme toggle available.
-- Deployment: GitHub Pages under `/tower-angular/` with a `404.html` fallback.
+- Theme: `ThemeService` persists the theme under `theme`; game settings persist under `core-defense:v1`. Dark Material theme by default; light theme toggle available.
+- Harness safety: production builds replace `harness-loader.ts` with a no-op, so `window.__TD__` cannot appear in production.
+- Deployment: GitHub Pages under `/tower-angular/`; `build:pages` includes `scripts/copy-404.mjs`, and `404.html` provides the deep-link fallback.
 - Game title: **Core Defense**.
 - Minimal synthesized WebAudio SFX with a mute toggle; no external audio files.
+- Plan docs commit `9a11d6e` is local on `main` and not pushed yet; TASK-000 pushes it together with the scaffold commit.
 
 ---
 

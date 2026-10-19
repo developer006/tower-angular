@@ -9,11 +9,13 @@ Orchestrator-owned. Add an entry whenever a cross-cutting decision is made.
 - **Package manager:** npm (Node 24.20.0, npm 11.19.0).
 - **Results committed:** yes; `results/evidence/` is gitignored.
 - **Game:** classic fixed-path tower defense, neon vector sci-fi theme, one map, 10 waves, 3 tower types, 4 enemy types + boss.
-- **Scaffold baseline:** Angular 22.2.3, standalone, zoneless, native Vitest, Angular Material 22 + CDK + animations, Playwright 1.x with Chromium.
+- **Scaffold baseline:** Angular 22.2.3, standalone, zoneless, native Vitest, Angular Material 22 + CDK + animations, angular-eslint 22 + Prettier, Playwright 1.x with Chromium.
 - **Routing enabled:** `/` menu and `/play` game; deviates from the blank-shell `--routing=false` baseline.
-- **Scaffold strategy:** scaffold in `C:\wrk\tower-angular-scaffold` (sibling) and move files into the existing non-empty repo; preserve `.git` and update README.
-- **Theming:** prebuilt Material themes copied to `public/assets/themes/`; `ThemeService` toggles `deeppurple-amber` / `purple-green`; default dark. Canvas uses its own neon palette.
-- **Deployment:** GitHub Pages under `/tower-angular/`, `npm run build:pages`, `404.html` fallback for deep links.
+- **Scaffold strategy:** scaffold in `C:\wrk\tower-angular-scaffold` (sibling); move source files only (skip `node_modules`), delete the scaffold dir, run `npm install` at the repo root; preserve `.git` and update README.
+- **Theming:** prebuilt Material themes copied to `public/assets/themes/`; `ThemeService` toggles `deeppurple-amber` / `purple-green` under the `theme` key; default dark. Game settings persist under `core-defense:v1`. Canvas uses its own neon palette.
+- **Harness safety:** the `e2e` build configuration replaces `harness-loader.ts` with a no-op, so `window.__TD__` cannot appear in production bundles.
+- **Deployment:** GitHub Pages under `/tower-angular/`, `npm run build:pages` (build + `scripts/copy-404.mjs`), `404.html` fallback for deep links.
+- **Plan docs commit:** `9a11d6e docs: plan + results hub` is local on `main`, not pushed yet; TASK-000 pushes it with the scaffold commit.
 - **Audio:** synthesized WebAudio SFX only; no external audio assets.
 - **Testing philosophy:** harness for setup/fast-forward/state assertions; real UI interaction for every user-facing behavior; only three visual snapshots.
 

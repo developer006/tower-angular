@@ -87,11 +87,12 @@ Spawn intervals and group delays live in data. Numbers are starting points for t
 
 ## Angular integration
 
-- Angular 22.2.3, standalone, zoneless, native Vitest, Angular Material 22 for chrome, Playwright for e2e.
+- Angular 22.2.x (22.2.3 verified), standalone, zoneless, native Vitest, Angular Material 22 + CDK + animations for chrome, angular-eslint 22 + Prettier, Playwright for e2e.
 - Engine is framework-free; `GameFacade` owns engine/loop/renderer and exposes signals.
 - HUD snapshots at 10 Hz; entity positions never go through change detection.
 - `GameCanvasComponent` renders; `BoardOverlayComponent` provides transparent DOM buttons over pads/towers for mouse, keyboard, accessibility, and stable test selectors.
-- Material theme service toggles prebuilt themes in `public/assets/themes/`; default dark. Relative asset URLs for subpath builds.
+- Material theme service toggles prebuilt themes in `public/assets/themes/`; default dark; theme preference under `theme`, game settings under `core-defense:v1`. Relative asset URLs for subpath builds.
+- Production builds replace `harness-loader.ts` with a no-op, so the e2e harness (`window.__TD__`) is absent from production bundles.
 
 ## UX and accessibility
 
