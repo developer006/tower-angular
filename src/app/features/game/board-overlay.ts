@@ -1,7 +1,14 @@
 import { Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
 import { MAP_01, tileCenter } from '../../core/content/map-01';
-import { CANVAS_HEIGHT, CANVAS_WIDTH, type TowerType } from '../../core/content/types';
-import type { RejectReason } from '../../core/game/state';
+import { towerDef } from '../../core/content/towers';
+import {
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+  type TargetingMode,
+  type TowerType,
+} from '../../core/content/types';
+import type { RejectReason, TowerState } from '../../core/game/state';
+import { setRangeCircle } from '../../core/render/renderer';
 import { GameFacade } from '../../state/game-facade';
 
 const PAD_SIZE = 36;
@@ -10,6 +17,15 @@ interface PadButton {
   id: string;
   left: string;
   top: string;
+}
+
+interface InspectedTower {
+  id: string;
+  padId: string;
+  towerType: TowerType;
+  level: 1 | 2 | 3;
+  invested: number;
+  targeting: TargetingMode;
 }
 
 function padButtons(): PadButton[] {
@@ -46,6 +62,17 @@ function placementMessage(reason: RejectReason | undefined): string {
   }
 }
 
+function inspectedFrom(tower: TowerState): InspectedTower {
+  return {
+    id: tower.id,
+    padId: tower.padId,
+    towerType: tower.towerType,
+    level: tower.level,
+    invested: tower.invested,
+    targeting: tower.targeting,
+  };
+}
+
 @Component({
   selector: 'app-board-overlay',
   templateUrl: './board-overlay.html',
@@ -53,6 +80,7 @@ function placementMessage(reason: RejectReason | undefined): string {
   host: {
     'data-testid': 'board-overlay',
     '[attr.data-selected-type]': 'selectedType() ?? ""',
+    '[attr.data-range-tiles]': 'rangeTiles()',
     '(keydown)': 'onKeydown($event)',
   },
 })
@@ -62,6 +90,10 @@ export class BoardOverlay {
   protected readonly pads = padButtons();
   protected readonly selectedType = signal<TowerType | null>(null);
   protected readonly placementError = signal('');
+  protected readonly inspected = signal<InspectedTower | null>(null);
+  protected readonly rangeTiles = signal<string | null>(null);
+  private readonly hoveredPadId = signal<string | null>(null);
+  private readonly focusedPadId = signal<string | null>(null);
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -71,7 +103,14 @@ export class BoardOverlay {
     document.addEventListener('keydown', onDocumentKey);
     destroyRef.onDestroy(() => {
       document.removeEventListener('keydown', onDocumentKey);
+      setRangeCircle(null);
     });
+  }
+
+  selectType(type: TowerType): void {
+    this.selectedType.set(type);
+    this.inspected.set(null);
+    this.publishRange();
   }
 
   protected onKeydown(event: KeyboardEvent): void {
@@ -79,21 +118,26 @@ export class BoardOverlay {
       return;
     }
     const target = event.target;
-    if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement) {
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
       return;
     }
     switch (event.key) {
       case '1':
-        this.selectedType.set('pulse');
+        this.selectType('pulse');
         return;
       case '2':
-        this.selectedType.set('mortar');
+        this.selectType('mortar');
         return;
       case '3':
-        this.selectedType.set('cryo');
+        this.selectType('cryo');
         return;
       case 'Escape':
         this.selectedType.set(null);
+        this.publishRange();
         return;
       default:
         return;
@@ -101,6 +145,15 @@ export class BoardOverlay {
   }
 
   protected onPadClick(padId: string): void {
+    if (!this.selectedType()) {
+      const tower = this.towerOnPad(padId);
+      if (tower) {
+        this.inspected.set(tower);
+        this.placementError.set('');
+        this.publishRange();
+        return;
+      }
+    }
     this.place(padId);
   }
 
@@ -112,6 +165,68 @@ export class BoardOverlay {
     this.place(padId);
   }
 
+  protected onPadEnter(padId: string): void {
+    this.hoveredPadId.set(padId);
+    this.publishRange();
+  }
+
+  protected onPadLeave(padId: string): void {
+    if (this.hoveredPadId() === padId) {
+      this.hoveredPadId.set(null);
+      this.publishRange();
+    }
+  }
+
+  protected onPadFocus(padId: string): void {
+    this.focusedPadId.set(padId);
+    this.publishRange();
+  }
+
+  protected onPadBlur(padId: string): void {
+    if (this.focusedPadId() === padId) {
+      this.focusedPadId.set(null);
+      this.publishRange();
+    }
+  }
+
+  protected onUpgrade(): void {
+    const tower = this.inspected();
+    if (!tower || tower.level === 3) {
+      return;
+    }
+    this.facade.dispatch({ type: 'upgradeTower', towerId: tower.id });
+    this.inspected.set(this.towerById(tower.id));
+    this.publishRange();
+  }
+
+  protected onSell(): void {
+    const tower = this.inspected();
+    if (!tower) {
+      return;
+    }
+    const result = this.facade.dispatch({ type: 'sellTower', towerId: tower.id });
+    if (!result.ok) {
+      return;
+    }
+    this.inspected.set(null);
+    this.placementError.set('');
+    this.publishRange();
+  }
+
+  protected onTargeting(event: Event): void {
+    const tower = this.inspected();
+    const select = event.target;
+    if (!tower || !(select instanceof HTMLSelectElement)) {
+      return;
+    }
+    const mode = select.value;
+    if (mode !== 'first' && mode !== 'strongest' && mode !== 'closest') {
+      return;
+    }
+    this.facade.dispatch({ type: 'setTargeting', towerId: tower.id, mode });
+    this.inspected.set(this.towerById(tower.id));
+  }
+
   private place(padId: string): void {
     const towerType = this.selectedType();
     if (!towerType) {
@@ -120,5 +235,38 @@ export class BoardOverlay {
     }
     const result = this.facade.dispatch({ type: 'placeTower', towerType, padId });
     this.placementError.set(result.ok ? '' : placementMessage(result.reason));
+  }
+
+  private towerOnPad(padId: string): InspectedTower | null {
+    const tower = this.facade.getFullState().towers.find((item) => item.padId === padId);
+    return tower ? inspectedFrom(tower) : null;
+  }
+
+  private towerById(id: string): InspectedTower | null {
+    const tower = this.facade.getFullState().towers.find((item) => item.id === id);
+    return tower ? inspectedFrom(tower) : null;
+  }
+
+  private publishRange(): void {
+    const selected = this.selectedType();
+    const activePadId = this.hoveredPadId() ?? this.focusedPadId();
+    const tower = this.inspected();
+    let padId: string | null = null;
+    let tiles: number | null = null;
+    if (selected && activePadId) {
+      padId = activePadId;
+      tiles = towerDef(selected).levels[0].range;
+    } else if (tower) {
+      padId = tower.padId;
+      tiles = towerDef(tower.towerType).levels[tower.level - 1].range;
+    }
+    this.rangeTiles.set(tiles === null ? null : String(tiles));
+    const pad = padId ? MAP_01.pads.find((item) => item.id === padId) : undefined;
+    if (tiles === null || !pad) {
+      setRangeCircle(null);
+      return;
+    }
+    const center = tileCenter(pad.col, pad.row);
+    setRangeCircle({ x: center.x, y: center.y, rangeTiles: tiles });
   }
 }

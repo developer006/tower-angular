@@ -5,7 +5,7 @@
   pointer-events: none;
 }
 
-button {
+:host > button {
   position: absolute;
   box-sizing: border-box;
   width: calc(36 / 960 * 100%);
@@ -17,8 +17,34 @@ button {
   cursor: pointer;
 }
 
-button:focus {
+:host > button:focus {
   outline: 2px solid #3ec6ff;
+}
+
+.inspector {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 3;
+  display: grid;
+  gap: 0.35rem;
+  min-width: 9rem;
+  padding: 0.55rem 0.7rem;
+  color: #e7f2ff;
+  pointer-events: auto;
+  background: rgb(11 16 32 / 92%);
+  border: 1px solid #3ec6ff;
+  font-size: 0.85rem;
+}
+
+.inspector p {
+  margin: 0;
+}
+
+.inspector button,
+.inspector select {
+  font: inherit;
+  pointer-events: auto;
 }
 
 .placement-error {
