@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GameFacade } from '../../state/game-facade';
 import { GamePage } from './game-page';
 
 const PAD_IDS = [
@@ -73,8 +74,112 @@ describe('BoardOverlay', () => {
       second?.destroy();
     }
   });
+
+  it('places a paused Pulse, rejects a taken pad and a tower the player cannot afford, and keeps score at 0', async () => {
+    const fixture = TestBed.createComponent(GamePage);
+    try {
+      await fixture.whenStable();
+      const facade = fixture.debugElement.injector.get(GameFacade);
+      facade.setPaused(true);
+      const page = fixture.nativeElement as HTMLElement;
+      const overlay = page.querySelector('[data-testid="board-overlay"]') as HTMLElement;
+
+      dispatchKey(overlay, '1');
+      fixture.detectChanges();
+      clickPad(page, 'pad-01');
+      fixture.detectChanges();
+
+      expect(errorText(page)).toBe('');
+      expect(goldText(page)).toBe('80');
+      expect(facade.getFullState().towers).toEqual([
+        expect.objectContaining({ id: 't1', padId: 'pad-01', towerType: 'pulse' }),
+      ]);
+      expect(scoreText(page)).toBe('0');
+
+      clickPad(page, 'pad-01');
+      fixture.detectChanges();
+      expect(goldText(page)).toBe('80');
+      expect(errorText(page)).toBe('That pad is already taken.');
+      expect(scoreText(page)).toBe('0');
+
+      dispatchKey(overlay, '2');
+      fixture.detectChanges();
+      clickPad(page, 'pad-02');
+      fixture.detectChanges();
+      expect(goldText(page)).toBe('80');
+      expect(errorText(page)).toBe('Not enough gold.');
+      expect(scoreText(page)).toBe('0');
+    } finally {
+      fixture.destroy();
+    }
+  });
+
+  it('does not dispatch when no tower is selected', async () => {
+    const fixture = TestBed.createComponent(GamePage);
+    try {
+      await fixture.whenStable();
+      const facade = fixture.debugElement.injector.get(GameFacade);
+      const page = fixture.nativeElement as HTMLElement;
+      const gold = goldText(page);
+      const dispatch = vi.spyOn(facade, 'dispatch');
+
+      clickPad(page, 'pad-03');
+      fixture.detectChanges();
+
+      expect(goldText(page)).toBe(gold);
+      expect(gold).toBe('150');
+      expect(errorText(page)).toBe('Select a tower first.');
+      expect(dispatch).not.toHaveBeenCalled();
+      expect(scoreText(page)).toBe('0');
+    } finally {
+      fixture.destroy();
+    }
+  });
+
+  it('places the selected tower when Enter is pressed on a focused pad', async () => {
+    const fixture = TestBed.createComponent(GamePage);
+    try {
+      await fixture.whenStable();
+      const facade = fixture.debugElement.injector.get(GameFacade);
+      facade.setPaused(true);
+      const page = fixture.nativeElement as HTMLElement;
+      const overlay = page.querySelector('[data-testid="board-overlay"]') as HTMLElement;
+
+      dispatchKey(overlay, '1');
+      fixture.detectChanges();
+      const pad = page.querySelector('[data-testid="pad-04"]') as HTMLButtonElement;
+      pad.focus();
+      pad.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(errorText(page)).toBe('');
+      expect(goldText(page)).toBe('80');
+      expect(facade.getFullState().towers).toEqual([
+        expect.objectContaining({ id: 't1', padId: 'pad-04', towerType: 'pulse' }),
+      ]);
+      expect(scoreText(page)).toBe('0');
+    } finally {
+      fixture.destroy();
+    }
+  });
 });
 
 function dispatchKey(overlay: HTMLElement, key: string): void {
   overlay.dispatchEvent(new KeyboardEvent('keydown', { key }));
+}
+
+function clickPad(page: HTMLElement, padId: string): void {
+  (page.querySelector(`[data-testid="${padId}"]`) as HTMLButtonElement).click();
+}
+
+function goldText(page: HTMLElement): string | null | undefined {
+  return page.querySelector('[data-testid="hud-gold"]')?.textContent;
+}
+
+function scoreText(page: HTMLElement): string | null | undefined {
+  return page.querySelector('[data-testid="hud-score"]')?.textContent;
+}
+
+function errorText(page: HTMLElement): string | null | undefined {
+  return page.querySelector('[data-testid="placement-error"]')?.textContent;
 }

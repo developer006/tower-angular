@@ -1,3 +1,4 @@
+<p class="placement-error" data-testid="placement-error">{{ placementError() }}</p>
 @for (pad of pads; track pad.id) {
   <button
     type="button"
@@ -7,6 +8,7 @@
     [attr.data-build-target]="selectedType() ? 'true' : null"
     [style.left]="pad.left"
     [style.top]="pad.top"
-    (click)="onPadClick()"
+    (click)="onPadClick(pad.id)"
+    (keydown)="onPadKeydown($event, pad.id)"
   ></button>
 }

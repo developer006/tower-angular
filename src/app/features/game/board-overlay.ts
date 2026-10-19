@@ -1,6 +1,8 @@
 import { Component, DestroyRef, ElementRef, inject, signal } from '@angular/core';
 import { MAP_01, tileCenter } from '../../core/content/map-01';
 import { CANVAS_HEIGHT, CANVAS_WIDTH, type TowerType } from '../../core/content/types';
+import type { RejectReason } from '../../core/game/state';
+import { GameFacade } from '../../state/game-facade';
 
 const PAD_SIZE = 36;
 
@@ -25,6 +27,25 @@ function padButtons(): PadButton[] {
   });
 }
 
+const PLACEMENT_ERRORS = {
+  occupied: 'That pad is already taken.',
+  'insufficient-gold': 'Not enough gold.',
+  'unknown-pad': 'That pad is not on the map.',
+  'unknown-tower': 'Unknown tower.',
+} as const;
+
+function placementMessage(reason: RejectReason | undefined): string {
+  switch (reason) {
+    case 'occupied':
+    case 'insufficient-gold':
+    case 'unknown-pad':
+    case 'unknown-tower':
+      return PLACEMENT_ERRORS[reason];
+    default:
+      return '';
+  }
+}
+
 @Component({
   selector: 'app-board-overlay',
   templateUrl: './board-overlay.html',
@@ -37,8 +58,10 @@ function padButtons(): PadButton[] {
 })
 export class BoardOverlay {
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly facade = inject(GameFacade);
   protected readonly pads = padButtons();
   protected readonly selectedType = signal<TowerType | null>(null);
+  protected readonly placementError = signal('');
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -77,8 +100,25 @@ export class BoardOverlay {
     }
   }
 
-  protected onPadClick(): void {
-    // TASK-021 places the tower
-    return;
+  protected onPadClick(padId: string): void {
+    this.place(padId);
+  }
+
+  protected onPadKeydown(event: KeyboardEvent, padId: string): void {
+    if (event.key !== 'Enter') {
+      return;
+    }
+    event.preventDefault();
+    this.place(padId);
+  }
+
+  private place(padId: string): void {
+    const towerType = this.selectedType();
+    if (!towerType) {
+      this.placementError.set('Select a tower first.');
+      return;
+    }
+    const result = this.facade.dispatch({ type: 'placeTower', towerType, padId });
+    this.placementError.set(result.ok ? '' : placementMessage(result.reason));
   }
 }

@@ -90,6 +90,11 @@ export class GameFacade {
     return result;
   }
 
+  setPaused(paused: boolean): void {
+    this.engine.setPaused(paused);
+    this.refresh();
+  }
+
   reset(options: ScenarioOptions): void {
     this.engine.configureScenario(options);
     this.refresh();
