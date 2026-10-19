@@ -1,0 +1,12 @@
+@for (pad of pads; track pad.id) {
+  <button
+    type="button"
+    tabindex="0"
+    [attr.data-testid]="pad.id"
+    [attr.aria-label]="pad.id"
+    [attr.data-build-target]="selectedType() ? 'true' : null"
+    [style.left]="pad.left"
+    [style.top]="pad.top"
+    (click)="onPadClick()"
+  ></button>
+}

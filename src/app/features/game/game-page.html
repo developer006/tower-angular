@@ -18,5 +18,10 @@
     </div>
   </dl>
   <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()">Deploy Wave</button>
-  <app-game-canvas />
+  <div class="board-stage">
+    <div class="board-frame">
+      <app-game-canvas />
+      <app-board-overlay />
+    </div>
+  </div>
 </section>
