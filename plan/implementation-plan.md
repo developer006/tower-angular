@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** Phase 0 tagged `phase-0` (`8fefaab`). Next brief: `plan/tasks/TASK-010-content-path.md`. Do not re-scaffold. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-010 merged (`7b5f9e3`). Next brief: `plan/tasks/TASK-011-engine-loop.md`. Do not re-scaffold. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
