@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-031 merged (`ce01ce7`). Next brief: `plan/tasks/TASK-032-waves-endstates.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-032 merged (`62f65ba`). Next brief: `plan/tasks/TASK-033-combat-e2e.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 

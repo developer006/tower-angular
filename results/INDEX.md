@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-031 merged)
+Last updated: 2026-10-20 (TASK-032 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -21,8 +21,8 @@ Last updated: 2026-10-20 (TASK-031 merged)
 | VERIFY-2 | Phase 2 verification | 023 | done | `results/VERIFY-PHASE-2.md` |
 | TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | done | `results/TASK-030-enemy-movement.md` |
 | TASK-031 | Targeting, firing, projectiles, armor/slow + tests | 030 | done | `results/TASK-031-combat.md` |
-| TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | in-progress | `results/TASK-032-waves-endstates.md` |
-| TASK-033 | E2E specs: combat, leak, defeat, victory | 032 | pending | `results/TASK-033-combat-e2e.md` |
+| TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | done | `results/TASK-032-waves-endstates.md` |
+| TASK-033 | E2E specs: combat, leak, defeat, victory | 032 | in-progress | `results/TASK-033-combat-e2e.md` |
 | TASK-034 | Headless balance simulator + reference strategies | 033 | pending | `results/TASK-034-balance-sim.md` |
 | TASK-035 | Balance pass and content tuning | 034 | pending | `results/TASK-035-balance-tune.md` |
 | VERIFY-3 | Phase 3 verification | 035 | pending | `results/VERIFY-PHASE-3.md` |
@@ -65,3 +65,4 @@ Last updated: 2026-10-20 (TASK-031 merged)
 - VERIFY-2 done: `047abdd docs(VERIFY-2): record phase 2 verification`, merged as `3ee9a2e`. Tagged `phase-2`.
 - TASK-030 done: `17385b4 feat(TASK-030): spawn waves, move enemies, and apply leaks`, merged as `95d25f4`. Orchestrator re-ran `npm test` (62 passed), lint, and `npm run e2e` (5 passed). Second drone at elapsed tick 48. Leak pays no bounty.
 - TASK-031 done: `548bd76 feat(TASK-031): add targeting, projectiles, armor, and slow`, merged as `ce01ce7`. Orchestrator re-ran `npm test` (74 passed), lint, and `npm run e2e` (5 passed). Pulse versus Tank deals 8. Kill bounty does not change score.
+- TASK-032 done: `2e3abaf feat(TASK-032): add wave clears, score, and the results overlay`, merged as `62f65ba`. Orchestrator re-ran `npm test` (85 passed), lint, and `npm run e2e` (5 passed). HUD score stays 0. Retry is present. Main Menu is not asserted absent.
