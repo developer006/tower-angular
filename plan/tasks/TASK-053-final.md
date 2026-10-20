@@ -23,13 +23,15 @@ Run these yourself, in the foreground. Do not trust an earlier summary.
 npm run lint
 npm test
 npm run e2e
+npm run e2e
+npm run e2e
 npm run sim
 npm run build
 npm run build:pages
 npx tsx scripts/perf-check.ts
 ```
 
-`npm run e2e` must print `18 passed`.
+All three `npm run e2e` runs must print `18 passed`. TASK-053-FIX already pinned the pause/speed clock to a fixed instant; if any run prints 17 passed, status is `blocked` with the failing spec.
 
 `npm run sim` stdout must show:
 
@@ -72,7 +74,7 @@ First lines:
 ```text
 status: pass
 commit: pending
-verify: npm run lint && npm test && npm run e2e && npm run sim && npm run build && npm run build:pages && npx tsx scripts/perf-check.ts
+verify: npm run lint && npm test && npm run e2e && npm run e2e && npm run e2e && npm run sim && npm run build && npm run build:pages && npx tsx scripts/perf-check.ts
 verify_exit: 0
 ```
 
