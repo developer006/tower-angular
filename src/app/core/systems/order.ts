@@ -1,27 +1,26 @@
+import { DT } from '../game/loop';
 import type { GameState } from '../game/state';
+import { applyDamage } from './damage';
+import { fireTowers } from './firing';
 import { moveEnemies } from './movement';
+import { moveProjectiles } from './projectiles';
 import { spawnDue } from './spawn';
+import { acquireTargets } from './targeting';
 
-export { moveEnemies, spawnDue };
+export { applyDamage, acquireTargets, fireTowers, moveEnemies, moveProjectiles, spawnDue };
 
 export function tickSlow(state: GameState): void {
-  void state;
-}
-
-export function acquireTargets(state: GameState): void {
-  void state;
-}
-
-export function fireTowers(state: GameState): void {
-  void state;
-}
-
-export function moveProjectiles(state: GameState): void {
-  void state;
-}
-
-export function applyDamage(state: GameState): void {
-  void state;
+  for (const enemy of state.enemies) {
+    if (enemy.slowRemaining <= 0) {
+      enemy.slowStrength = 0;
+      enemy.slowRemaining = 0;
+      continue;
+    }
+    enemy.slowRemaining = Math.max(0, enemy.slowRemaining - DT);
+    if (enemy.slowRemaining === 0) {
+      enemy.slowStrength = 0;
+    }
+  }
 }
 
 export function advanceWave(state: GameState): void {

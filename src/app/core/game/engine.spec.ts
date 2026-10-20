@@ -332,16 +332,18 @@ describe('fixed-step engine', () => {
     expect(right.getState().tick).toBe(600);
 
     const state = left.getState();
-    expect(state.gold).toBe(80);
+    expect(state.gold).toBe(86);
     expect(state.phase).toBe('wave');
     expect(state.wave).toBe(1);
     expect(state.integrity).toBe(20);
     expect(state.score).toBe(0);
-    expect(state.enemies).toHaveLength(8);
+    expect(state.enemies).toHaveLength(7);
+    expect(state.enemies[0].id).toBe('e2');
     expect(state.enemies.every((enemy) => enemy.alive && enemy.distanceAlongPath < 2064)).toBe(
       true,
     );
-    expect(state.projectiles).toEqual([]);
+    expect(state.projectiles).toHaveLength(1);
+    expect(state.projectiles[0].id).toBe('p18');
     expect(state.effects).toEqual([]);
     expect(state.spawnQueue).toEqual([]);
     expect(state.rngState).toBe(7);
