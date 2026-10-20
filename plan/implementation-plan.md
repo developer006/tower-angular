@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-040 merged (`3e8f1df`). Next brief: `plan/tasks/TASK-041-pause-persistence.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-041 merged (`6153cd6`). Next brief: `plan/tasks/TASK-042-audio-polish.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
