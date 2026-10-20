@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-052 merged)
+Last updated: 2026-10-20 (v1.0.0 released)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ Last updated: 2026-10-20 (TASK-052 merged)
 | TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 051 | done | `results/TASK-052-github-pages.md` |
 | TASK-053 | Final independent verification and v1 acceptance report | 052 | blocked | `results/VERIFY-FINAL.md` |
 | TASK-053-FIX | Pin the pause/speed clock to a fixed instant | 053 | done | `results/TASK-053-FIX.md` |
-| TASK-053 | Final independent verification and v1 acceptance report (rerun) | 053-FIX | in-progress | `results/VERIFY-FINAL.md` |
+| TASK-053 | Final independent verification and v1 acceptance report (rerun) | 053-FIX | done | `results/VERIFY-FINAL.md` |
 
 ## Rules
 
@@ -85,3 +85,4 @@ Last updated: 2026-10-20 (TASK-052 merged)
 - TASK-052 done: `6e468ca feat(TASK-052): add the GitHub Pages build and 404 fallback`, merged as `ae474cf`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run build:pages`. Base href `/tower-angular/`. `404.html` identical to `index.html`. `PROD_ABSENT`. Tag `v1.0.0` on `ae474cf` only after VERIFY-FINAL passes.
 - TASK-053 blocked: `npm run e2e` printed 17 passed, 1 failed. `e2e/specs/pause-speed.spec.ts:46` failed with `Cannot fast-forward to the past` because `openClockPlay` reads `Date.now()` after `clock.install()`. Sim, tests, lint, build, pages, and perf passed. Blocked report `ddb4379` was not merged; the branch was deleted. Fix is `plan/tasks/TASK-053-FIX.md`. Do not tag `v1.0.0`.
 - TASK-053-FIX done: `778a3f4 test(TASK-053-FIX): pin the pause-speed clock to a fixed instant`, merged as `b5e4627`. Orchestrator re-ran three `npm run e2e` runs: 18 passed each. `npm test` 105, lint clean. `CLOCK_START` is one fixed instant for `install` and `pauseAt`; readiness uses 400 slices, not wall time.
+- TASK-053 done: `e15a00a docs(TASK-053): record final verification`, merged as `087f4ee`. Tag `v1.0.0` on `087f4ee`. Three e2e runs 18 passed; 105 unit tests; sim invariants held; `PROD_ABSENT` on production and pages; pages `404.html` byte-identical to `index.html`; perf 0.1468 ms. Orchestrator re-ran e2e, sim, build, and pages independently before merging.

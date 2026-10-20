@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-052 merged (`ae474cf`). TASK-053-FIX merged (`b5e4627`); the pause/speed clock is now fixed and three e2e runs pass. Next: re-run `plan/tasks/TASK-053-final.md`. Do not tag `v1.0.0` until `results/VERIFY-FINAL.md` has `status: pass`.
+> **Status:** v1.0.0 released (`087f4ee`, tag `v1.0.0`). All phases 0-5 complete; `results/VERIFY-FINAL.md` is `status: pass`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
