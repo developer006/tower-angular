@@ -45,6 +45,7 @@ function removeDead(state: GameState): void {
       index += 1;
       continue;
     }
+    state.kills = (state.kills ?? 0) + 1;
     state.gold += enemyDef(enemy.enemyType).bounty;
     state.enemies.splice(index, 1);
   }

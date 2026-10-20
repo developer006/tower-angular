@@ -1,0 +1,5 @@
+<div data-testid="wave-preview">
+  @for (group of groups(); track $index) {
+    <span>{{ group.count }} {{ group.label }}{{ $last ? '' : ', ' }}</span>
+  }
+</div>

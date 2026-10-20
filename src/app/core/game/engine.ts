@@ -28,6 +28,9 @@ function createInitialState(seed: number): GameState {
     integrity: STARTING_INTEGRITY,
     wave: 1,
     score: 0,
+    kills: 0,
+    wavesCleared: 0,
+    bestWave: 0,
     towers: [],
     enemies: [],
     projectiles: [],
@@ -303,8 +306,10 @@ export class GameEngine {
     if (this.state.phase === 'victory' || this.state.phase === 'defeat') {
       return reject('ended');
     }
+    const wave = getWave(this.state.wave);
+    this.state.bestWave = Math.max(this.state.bestWave ?? 0, this.state.wave);
     this.state.phase = 'wave';
-    this.state.spawnQueue = expandWave(getWave(this.state.wave));
+    this.state.spawnQueue = expandWave(wave);
     this.state.waveStartTick = this.state.tick;
     this.state.history.push(command);
     return { ok: true };

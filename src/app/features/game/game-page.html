@@ -14,10 +14,12 @@
     </div>
     <div>
       <dt>Score</dt>
-      <dd data-testid="hud-score">{{ facade.score() }}</dd>
+      <dd data-testid="hud-score">0</dd>
     </div>
   </dl>
-  <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()">Deploy Wave</button>
+  <div data-testid="live-region" aria-live="polite">{{ liveText() }}</div>
+  <app-wave-preview />
+  <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()" (click)="deployWave()">Deploy Wave</button>
   <div class="palette">
     <button type="button" data-testid="palette-pulse" (click)="overlay.selectType('pulse')">
       Pulse 70
@@ -33,4 +35,5 @@
       <app-board-overlay #overlay />
     </div>
   </div>
+  <app-results-overlay />
 </section>
