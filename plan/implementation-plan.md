@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** Phase 4 tagged `phase-4` (`1e3abbd`). Next brief: `plan/tasks/TASK-050-visual-regression.md`. Do not commit Windows screenshot baselines. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-050 merged (`359a41c`). Next brief: `plan/tasks/TASK-051-docs-release.md`. Do not commit Windows screenshot baselines. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
