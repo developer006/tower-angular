@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** Phase 2 tagged `phase-2` (`3ee9a2e`). Next brief: `plan/tasks/TASK-030-enemy-movement.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-030 merged (`95d25f4`). Next brief: `plan/tasks/TASK-031-combat.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
