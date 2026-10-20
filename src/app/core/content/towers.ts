@@ -16,10 +16,10 @@ function level(
 }
 
 const pulseBase: TowerLevelStats = { damage: 12, rate: 1.8, range: 3.2 };
-const mortarBase: TowerLevelStats = { damage: 45, rate: 0.55, range: 4, splashRadius: 1 };
+const mortarBase: TowerLevelStats = { damage: 34, rate: 0.55, range: 4, splashRadius: 1 };
 const cryoBase: TowerLevelStats = {
   damage: 5,
-  rate: 1.2,
+  rate: 4.8,
   range: 3,
   slowStrength: 0.4,
   slowDuration: 1.5,
