@@ -17,7 +17,8 @@
   cursor: pointer;
 }
 
-:host > button:focus {
+:host > button:focus,
+:host > button:focus-visible {
   outline: 2px solid #3ec6ff;
 }
 
