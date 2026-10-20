@@ -1,5 +1,8 @@
-<h1>Core Defense</h1>
-<button matButton type="button" data-testid="theme-toggle" aria-label="Toggle color theme" (click)="theme.toggle()">
-  Theme: {{ theme.activeTheme() }}
-</button>
-<router-outlet />
+<main>
+  <h1>Core Defense</h1>
+  <button matButton type="button" data-testid="theme-toggle" aria-label="Toggle color theme" (click)="theme.toggle()">
+    Toggle color theme
+  </button>
+  <span>Theme: {{ theme.activeTheme() }}</span>
+  <router-outlet />
+</main>
