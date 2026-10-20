@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-043 merged)
+Last updated: 2026-10-20 (TASK-044 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -30,8 +30,8 @@ Last updated: 2026-10-20 (TASK-043 merged)
 | TASK-041 | Pause/speed, visibility handling, persistence, settings, corrupted storage fallback, best score in results | 040 | done | `results/TASK-041-pause-persistence.md` |
 | TASK-042 | Synth SFX, visual effects, reduced motion, colorblind palette | 041 | done | `results/TASK-042-audio-polish.md` |
 | TASK-043 | Accessibility pass: aria-live, focus, keyboard, axe scan (`@axe-core/playwright`) | 042 | done | `results/TASK-043-accessibility.md` |
-| TASK-044 | E2E specs: pause/speed, persistence, accessibility | 043 | in-progress | `results/TASK-044-polish-e2e.md` |
-| VERIFY-4 | Phase 4 verification | 044 | pending | `results/VERIFY-PHASE-4.md` |
+| TASK-044 | E2E specs: pause/speed, persistence, accessibility | 043 | done | `results/TASK-044-polish-e2e.md` |
+| VERIFY-4 | Phase 4 verification | 044 | in-progress | `results/VERIFY-PHASE-4.md` |
 | TASK-050 | Visual regression spec and CI baselines | VERIFY-4 | pending | `results/TASK-050-visual-regression.md` |
 | TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | pending | `results/TASK-051-docs-release.md` |
 | TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow | 051 | pending | `results/TASK-052-github-pages.md` |
@@ -76,3 +76,4 @@ Last updated: 2026-10-20 (TASK-043 merged)
 - TASK-041 done: `0cc22f2 feat(TASK-041): add pause, speed, and settings persistence`, merged as `6153cd6`. Orchestrator re-ran `npm test` (99 passed), lint, and `npm run e2e` (8 passed). Storage key is `core-defense:v1`. Theme stays separate.
 - TASK-042 done: `05f0704 feat(TASK-042): add synth cues, reduced motion, and a colorblind palette`, merged as `b47da29`. Orchestrator re-ran `npm test` (104 passed), lint, and `npm run e2e` (8 passed). Synth stays in the feature layer. `state.effects` is still unused.
 - TASK-043 done: `376e049 feat(TASK-043): add an axe scan and fix the violations it finds`, merged as `ab8cae1`. Orchestrator re-ran `npm test` (104 passed), lint, and `npm run e2e` (10 passed). Axe scans of `/` and `/play` use no `disableRules`.
+- TASK-044 done: `b8ac3dd test(TASK-044): cover pause, persistence, and accessibility`, merged as `1e3abbd`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run e2e` (18 passed). Tag `phase-4` on `1e3abbd` only after VERIFY-4 passes.
