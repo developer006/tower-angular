@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** Phase 3 tagged `phase-3` (`db081ac`). Next brief: `plan/tasks/TASK-040-menu-results.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-040 merged (`3e8f1df`). Next brief: `plan/tasks/TASK-041-pause-persistence.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 

@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (phase-3 tagged)
+Last updated: 2026-10-20 (TASK-040 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -26,8 +26,8 @@ Last updated: 2026-10-20 (phase-3 tagged)
 | TASK-034 | Headless balance simulator + reference strategies | 033 | done | `results/TASK-034-balance-sim.md` |
 | TASK-035 | Balance pass and content tuning | 034 | done | `results/TASK-035-balance-tune.md` |
 | VERIFY-3 | Phase 3 verification | 035 | done | `results/VERIFY-PHASE-3.md` |
-| TASK-040 | Router, `/` main menu, results-to-menu flow, restart | VERIFY-3 | in-progress | `results/TASK-040-menu-results.md` |
-| TASK-041 | Pause/speed, visibility handling, persistence, settings, corrupted storage fallback, best score in results | 040 | pending | `results/TASK-041-pause-persistence.md` |
+| TASK-040 | Router, `/` main menu, results-to-menu flow, restart | VERIFY-3 | done | `results/TASK-040-menu-results.md` |
+| TASK-041 | Pause/speed, visibility handling, persistence, settings, corrupted storage fallback, best score in results | 040 | in-progress | `results/TASK-041-pause-persistence.md` |
 | TASK-042 | Synth SFX, visual effects, reduced motion, colorblind palette | 041 | pending | `results/TASK-042-audio-polish.md` |
 | TASK-043 | Accessibility pass: aria-live, focus, keyboard, axe scan (`@axe-core/playwright`) | 042 | pending | `results/TASK-043-accessibility.md` |
 | TASK-044 | E2E specs: pause/speed, persistence, accessibility | 043 | pending | `results/TASK-044-polish-e2e.md` |
@@ -72,3 +72,4 @@ Last updated: 2026-10-20 (phase-3 tagged)
 - VERIFY-3 blocked before merge. Sim, tests, lint, and e2e passed. `src/app/core/systems/wave.spec.ts` imports `@angular/core/testing`. Fix is `plan/tasks/TASK-032-FIX.md`.
 - TASK-032-FIX done: `d0518d9 fix(TASK-032): move Angular wave tests out of core/systems`. Orchestrator re-ran `npm test` (87 passed), lint, and grep. `NO_ANGULAR` under `src/app/core/game` and `src/app/core/systems`.
 - VERIFY-3 done: `a33be39 docs(VERIFY-3): record phase 3 verification`, merged as `db081ac`. Tagged `phase-3`. Sim rows matched the earlier orchestrator run.
+- TASK-040 done: `66f40de feat(TASK-040): add the main menu and results-to-menu link`, merged as `3e8f1df`. Orchestrator re-ran `npm test` (89 passed), lint, and `npm run e2e` (8 passed). Retry remains. Main Menu is `main-menu-button`.
