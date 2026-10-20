@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-034 merged)
+Last updated: 2026-10-20 (TASK-035 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -24,8 +24,8 @@ Last updated: 2026-10-20 (TASK-034 merged)
 | TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | done | `results/TASK-032-waves-endstates.md` |
 | TASK-033 | E2E specs: combat, leak, defeat, victory | 032 | done | `results/TASK-033-combat-e2e.md` |
 | TASK-034 | Headless balance simulator + reference strategies | 033 | done | `results/TASK-034-balance-sim.md` |
-| TASK-035 | Balance pass and content tuning | 034 | in-progress | `results/TASK-035-balance-tune.md` |
-| VERIFY-3 | Phase 3 verification | 035 | pending | `results/VERIFY-PHASE-3.md` |
+| TASK-035 | Balance pass and content tuning | 034 | done | `results/TASK-035-balance-tune.md` |
+| VERIFY-3 | Phase 3 verification | 035 | in-progress | `results/VERIFY-PHASE-3.md` |
 | TASK-040 | Router, `/` main menu, results-to-menu flow, restart | VERIFY-3 | pending | `results/TASK-040-menu-results.md` |
 | TASK-041 | Pause/speed, visibility handling, persistence, settings, corrupted storage fallback, best score in results | 040 | pending | `results/TASK-041-pause-persistence.md` |
 | TASK-042 | Synth SFX, visual effects, reduced motion, colorblind palette | 041 | pending | `results/TASK-042-audio-polish.md` |
@@ -68,3 +68,4 @@ Last updated: 2026-10-20 (TASK-034 merged)
 - TASK-032 done: `2e3abaf feat(TASK-032): add wave clears, score, and the results overlay`, merged as `62f65ba`. Orchestrator re-ran `npm test` (85 passed), lint, and `npm run e2e` (5 passed). HUD score stays 0. Retry is present. Main Menu is not asserted absent.
 - TASK-033 done: `83edc4e test(TASK-033): cover combat, defeat, and victory`, merged as `0bdf9d4`. Orchestrator re-ran `npm run e2e` (8 passed), `npm test` (85 passed), and lint. Victory score oracle is 500.
 - TASK-034 done: `23b3720 feat(TASK-034): add the headless balance simulator`, merged as `ab44a48`. Orchestrator re-ran `npm run sim`; stdout matched the result file. Pulse and mortar still win. Cryo dies at wave 2. TASK-035 tunes content.
+- TASK-035 done: `c729279 feat(TASK-035): tune content so the reference strategies meet the invariants`, merged as `3de435b`. Orchestrator re-ran `npm run sim`; stdout matched. Single-type strategies defeat at bestWave 6. Mixed seed 1 wins with integrity 11. `npm run e2e` 8 passed.
