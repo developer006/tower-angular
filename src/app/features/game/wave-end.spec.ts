@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 import type { EnemyState, GameState } from '../../core/game/state';
 import { GameFacade } from '../../state/game-facade';
 import { GamePage } from './game-page';
@@ -63,6 +64,9 @@ describe('results overlay and wave preview', () => {
       expect(root.querySelector('[data-testid="live-region"]')?.getAttribute('aria-live')).toBe('polite');
       expect(root.querySelector('[data-testid="live-region"]')?.textContent).toBe('Defeat. The core is lost.');
       expect(root.querySelector('[data-testid="retry"]')).not.toBeNull();
+      const mainMenu = root.querySelector('[data-testid="main-menu-button"]');
+      expect(mainMenu).not.toBeNull();
+      expect(mainMenu?.textContent?.trim()).toBe('Main Menu');
 
       (root.querySelector('[data-testid="retry"]') as HTMLButtonElement).click();
       fixture.detectChanges();
@@ -119,6 +123,36 @@ describe('results overlay and wave preview', () => {
       expect(facade.getFullState().bestWave).toBe(1);
       expect(root.querySelector('[data-testid="live-region"]')?.textContent).toBe('Wave 1 deployed.');
       expect(root.querySelector('[data-testid="results-overlay"]')).toBeNull();
+    } finally {
+      fixture.destroy();
+    }
+  });
+
+  it('navigates Main Menu to / without resetting the run', async () => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: '', children: [] }])],
+    });
+    const { fixture, root, facade } = await page();
+    try {
+      const state = engineState(facade);
+      state.phase = 'wave';
+      state.integrity = 1;
+      state.gold = 200;
+      state.enemies = [drone('e1', 2063.5)];
+      state.spawnQueue = [];
+      state.projectiles = [];
+
+      facade.stepTicks(1);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(root.querySelector('[data-testid="retry"]')).not.toBeNull();
+      (root.querySelector('[data-testid="main-menu-button"]') as HTMLButtonElement).click();
+      await fixture.whenStable();
+
+      expect(TestBed.inject(Router).url).toBe('/');
+      expect(facade.getFullState().gold).toBe(200);
+      expect(facade.getFullState().phase).toBe('defeat');
     } finally {
       fixture.destroy();
     }

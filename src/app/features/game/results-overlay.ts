@@ -1,4 +1,5 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, Injector } from '@angular/core';
+import { Router } from '@angular/router';
 import { GameFacade } from '../../state/game-facade';
 
 @Component({
@@ -8,6 +9,7 @@ import { GameFacade } from '../../state/game-facade';
 })
 export class ResultsOverlay {
   private readonly facade = inject(GameFacade);
+  private readonly injector = inject(Injector);
 
   protected readonly view = computed(() => {
     this.facade.score();
@@ -27,5 +29,9 @@ export class ResultsOverlay {
 
   protected retry(): void {
     this.facade.dispatch({ type: 'reset', seed: 1 });
+  }
+
+  protected mainMenu(): void {
+    void this.injector.get(Router).navigateByUrl('/');
   }
 }
