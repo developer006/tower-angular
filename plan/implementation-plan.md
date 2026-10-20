@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-032-FIX merged. Next: re-run `results/VERIFY-PHASE-3.md`. Do not start TASK-040 until that file has `status: pass`.
+> **Status:** Phase 3 tagged `phase-3` (`db081ac`). Next brief: `plan/tasks/TASK-040-menu-results.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
