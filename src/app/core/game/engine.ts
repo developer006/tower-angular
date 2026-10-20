@@ -2,6 +2,7 @@ import { padById } from '../content/map-01';
 import { TOWERS, towerDef } from '../content/towers';
 import { DEFAULT_TARGETING, STARTING_GOLD, STARTING_INTEGRITY, sellRefund } from '../content/types';
 import type { TargetingMode, TowerType } from '../content/types';
+import { expandWave, getWave } from '../content/waves';
 import { runSimulationSystems } from '../systems/order';
 import type { Command, CommandResult, GameState, RejectReason, TowerState } from './state';
 
@@ -32,6 +33,7 @@ function createInitialState(seed: number): GameState {
     projectiles: [],
     effects: [],
     spawnQueue: [],
+    waveStartTick: 0,
     rngState: seed >>> 0,
     paused: false,
     speed: 1,
@@ -302,6 +304,8 @@ export class GameEngine {
       return reject('ended');
     }
     this.state.phase = 'wave';
+    this.state.spawnQueue = expandWave(getWave(this.state.wave));
+    this.state.waveStartTick = this.state.tick;
     this.state.history.push(command);
     return { ok: true };
   }

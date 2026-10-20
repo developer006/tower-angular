@@ -17,10 +17,16 @@ export interface EnemyState {
   enemyType: EnemyType;
   hp: number;
   maxHp: number;
+  speed: number;
+  leakDamage: number;
   distanceAlongPath: number;
   alive: boolean;
   slowStrength: number;
   slowRemaining: number;
+  spawnedAtTick: number;
+  /** Distance before this enemy's movement steps. Keeps 60 drone ticks at exactly 48. */
+  travelOrigin?: number;
+  travelTicks?: number;
 }
 
 export interface ProjectileState {
@@ -53,6 +59,7 @@ export interface GameState {
   projectiles: ProjectileState[];
   effects: EffectState[];
   spawnQueue: SpawnEvent[];
+  waveStartTick: number;
   rngState: number;
   paused: boolean;
   speed: 1 | 2;

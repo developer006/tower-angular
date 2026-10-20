@@ -1,14 +1,10 @@
 import type { GameState } from '../game/state';
+import { moveEnemies } from './movement';
+import { spawnDue } from './spawn';
 
-export function spawnDue(state: GameState): void {
-  void state;
-}
+export { moveEnemies, spawnDue };
 
 export function tickSlow(state: GameState): void {
-  void state;
-}
-
-export function moveEnemies(state: GameState): void {
   void state;
 }
 
