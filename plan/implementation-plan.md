@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-023 blocked before commit. Next brief: `plan/tasks/TASK-023-FIX.md`. Do not weaken the placement-error oracle.
+> **Status:** TASK-023-FIX merged (`d87761e`). Next: `results/VERIFY-PHASE-2.md`. Do not start TASK-030 until that file has `status: pass`.
 
 ## Current repository state
 
