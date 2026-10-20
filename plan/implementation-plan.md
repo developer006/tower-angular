@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-035 merged (`3de435b`). Next: `results/VERIFY-PHASE-3.md`. Do not start TASK-040 until that file has `status: pass`.
+> **Status:** VERIFY-3 blocked. `wave.spec.ts` imports Angular. Next brief: `plan/tasks/TASK-032-FIX.md`. Do not start TASK-040.
 
 ## Current repository state
 
