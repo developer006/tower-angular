@@ -1,5 +1,6 @@
 import { TILE_SIZE } from '../content/types';
 import { clearStaticCache, drawStatic, type DrawContext } from './background';
+import { drawActors, type ActorFrame } from './entities';
 import {
   PALETTE,
   restoreDefaultPalette,
@@ -50,6 +51,7 @@ export function renderMap(
   backingWidth: number,
   backingHeight: number,
   palette: MapPalette = selectedPalette,
+  actors?: ActorFrame | null,
 ): void {
   if (!canvas) {
     return;
@@ -71,6 +73,9 @@ export function renderMap(
   try {
     drawStatic(ctx, backingWidth, backingHeight);
     drawDynamic(ctx);
+    if (actors) {
+      drawActors(ctx, backingWidth, backingHeight, actors);
+    }
   } finally {
     if (swapped) {
       restoreDefaultPalette();

@@ -112,6 +112,7 @@ export class GamePage implements OnInit, OnDestroy {
       canvas.width,
       canvas.height,
       this.settings.colorblind() ? COLORBLIND_PALETTE : PALETTE,
+      this.facade.getFullState(),
     );
   }
 

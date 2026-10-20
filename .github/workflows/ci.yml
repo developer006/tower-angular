@@ -20,6 +20,14 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e
+      - name: Compare visual baselines
+        run: |
+          if [ -d e2e/specs/visual.spec.ts-snapshots ]; then
+            VISUAL=1 npx playwright test e2e/specs/visual.spec.ts
+          else
+            echo "baselines not committed yet"
+            exit 0
+          fi
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
