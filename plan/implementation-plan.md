@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-042 merged (`b47da29`). Next brief: `plan/tasks/TASK-043-accessibility.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-043 merged (`ab8cae1`). Next brief: `plan/tasks/TASK-044-polish-e2e.md`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 
