@@ -6,6 +6,7 @@ import {
   LOGICAL_WIDTH,
 } from '../../core/render/layout';
 import { renderMap } from '../../core/render/renderer';
+import { GameFacade } from '../../state/game-facade';
 
 @Component({
   selector: 'app-game-canvas',
@@ -14,6 +15,7 @@ import { renderMap } from '../../core/render/renderer';
 })
 export class GameCanvas implements AfterViewInit, OnDestroy {
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly facade = inject(GameFacade);
   private readonly board = viewChild<ElementRef<HTMLCanvasElement>>('board');
   private observer: ResizeObserver | null = null;
   private destroyed = false;
@@ -55,6 +57,6 @@ export class GameCanvas implements AfterViewInit, OnDestroy {
     canvas.style.height = `${css.height}px`;
     canvas.width = css.width * dpr;
     canvas.height = css.height * dpr;
-    renderMap(canvas, canvas.width, canvas.height);
+    renderMap(canvas, canvas.width, canvas.height, undefined, this.facade.getFullState());
   }
 }
