@@ -16,6 +16,7 @@ export interface TdHarness {
   setManualMode(enabled: boolean): void;
   dispatch(command: Command): CommandResult;
   reset(options: ScenarioOptions): void;
+  getLoop(): { accumulator: number };
   getMap(): {
     padIds: string[];
     waypoints: { x: number; y: number }[];
@@ -31,6 +32,7 @@ interface HarnessFacade {
   setManualMode(enabled: boolean): void;
   dispatch(command: Command): CommandResult;
   reset(options: ScenarioOptions): void;
+  getLoop(): { accumulator: number };
   getMap(): ReturnType<TdHarness['getMap']>;
 }
 
@@ -71,6 +73,7 @@ export function installHarness(_facade?: unknown): void {
     reset: (options: ScenarioOptions) => {
       facade?.reset(options);
     },
+    getLoop: () => facade?.getLoop() ?? { accumulator: 0 },
     getMap: () => facade?.getMap() ?? EMPTY_MAP,
   };
   (globalThis as { __TD__?: TdHarness }).__TD__ = hook;

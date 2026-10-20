@@ -135,6 +135,10 @@ export class GameFacade {
     };
   }
 
+  getLoop(): { accumulator: number } {
+    return { accumulator: this.loop.accumulator };
+  }
+
   getFullState(): GameState {
     return this.engine.getState();
   }

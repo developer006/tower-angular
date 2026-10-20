@@ -89,6 +89,34 @@ describe('GameFacade', () => {
     expect(map.core).toEqual({ col: MAP_01.core.col, row: MAP_01.core.row });
   });
 
+  it('getLoop returns a copy of the accumulator', () => {
+    const frames: FrameRequestCallback[] = [];
+    const originalRaf = globalThis.requestAnimationFrame;
+    const originalCancel = globalThis.cancelAnimationFrame;
+    globalThis.requestAnimationFrame = (callback: FrameRequestCallback): number => {
+      frames.push(callback);
+      return frames.length;
+    };
+    globalThis.cancelAnimationFrame = () => undefined;
+
+    const facade = new GameFacade();
+    try {
+      expect(facade.getLoop()).toEqual({ accumulator: 0 });
+      facade.start();
+      frames[0](0);
+      frames[1](16);
+      const accumulator = facade.getLoop().accumulator;
+      expect(accumulator).toBeGreaterThan(0);
+      expect(accumulator).toBeLessThan(1 / 60);
+      facade.getLoop().accumulator = 1;
+      expect(facade.getLoop().accumulator).toBe(accumulator);
+    } finally {
+      facade.stop();
+      globalThis.requestAnimationFrame = originalRaf;
+      globalThis.cancelAnimationFrame = originalCancel;
+    }
+  });
+
   it('skips the first frame and later frames while manual mode is on', () => {
     const frames: FrameRequestCallback[] = [];
     const originalRaf = globalThis.requestAnimationFrame;
