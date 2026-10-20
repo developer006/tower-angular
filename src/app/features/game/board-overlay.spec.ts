@@ -375,6 +375,38 @@ describe('BoardOverlay', () => {
       fixture.destroy();
     }
   });
+
+  it('shows an apply-time occupied rejection after one unpaused step', async () => {
+    const fixture = TestBed.createComponent(GamePage);
+    try {
+      await fixture.whenStable();
+      const facade = fixture.debugElement.injector.get(GameFacade);
+      facade.setManualMode(true);
+      const page = fixture.nativeElement as HTMLElement;
+      const overlay = page.querySelector('[data-testid="board-overlay"]') as HTMLElement;
+
+      expect(facade.paused()).toBe(false);
+      dispatchKey(overlay, '1');
+      fixture.detectChanges();
+      clickPad(page, 'pad-01');
+      clickPad(page, 'pad-01');
+      fixture.detectChanges();
+      expect(goldText(page)).toBe('150');
+      expect(errorText(page)).toBe('');
+
+      facade.stepTicks(1);
+      fixture.detectChanges();
+
+      expect(goldText(page)).toBe('80');
+      expect(errorText(page)).toBe('That pad is already taken.');
+      expect(facade.getFullState().towers).toEqual([
+        expect.objectContaining({ id: 't1', padId: 'pad-01', towerType: 'pulse' }),
+      ]);
+      expect(facade.getFullState().towers).toHaveLength(1);
+    } finally {
+      fixture.destroy();
+    }
+  });
 });
 
 function dispatchKey(overlay: HTMLElement, key: string): void {

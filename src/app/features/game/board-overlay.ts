@@ -7,7 +7,7 @@ import {
   type TargetingMode,
   type TowerType,
 } from '../../core/content/types';
-import type { RejectReason, TowerState } from '../../core/game/state';
+import type { CommandResult, RejectReason, TowerState } from '../../core/game/state';
 import { setRangeCircle } from '../../core/render/renderer';
 import { GameFacade } from '../../state/game-facade';
 
@@ -97,11 +97,15 @@ export class BoardOverlay {
 
   constructor() {
     const destroyRef = inject(DestroyRef);
+    this.facade.registerStepResults((results) => {
+      this.showStepResults(results);
+    });
     const onDocumentKey = (event: KeyboardEvent): void => {
       this.onKeydown(event);
     };
     document.addEventListener('keydown', onDocumentKey);
     destroyRef.onDestroy(() => {
+      this.facade.registerStepResults(null);
       document.removeEventListener('keydown', onDocumentKey);
       setRangeCircle(null);
     });
@@ -225,6 +229,23 @@ export class BoardOverlay {
     }
     this.facade.dispatch({ type: 'setTargeting', towerId: tower.id, mode });
     this.inspected.set(this.towerById(tower.id));
+  }
+
+  private showStepResults(results: CommandResult[]): void {
+    for (const result of results) {
+      if (result.ok) {
+        this.placementError.set('');
+        continue;
+      }
+      const message = placementMessage(result.reason);
+      if (message) {
+        this.placementError.set(message);
+      }
+    }
+    if (results.length > 0) {
+      const current = this.inspected();
+      this.inspected.set(current ? this.towerById(current.id) : null);
+    }
   }
 
   private place(padId: string): void {

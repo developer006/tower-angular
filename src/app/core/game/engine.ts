@@ -66,6 +66,7 @@ function cloneCommand(command: Command): Command {
 
 export class GameEngine {
   private state: GameState;
+  private stepResults: CommandResult[] = [];
 
   constructor(seed: number) {
     this.state = createInitialState(seed);
@@ -74,6 +75,7 @@ export class GameEngine {
 
   reset(seed: number): void {
     this.state = createInitialState(seed);
+    this.stepResults = [];
   }
 
   configureScenario(options: {
@@ -121,9 +123,15 @@ export class GameEngine {
     const queued = this.state.pending;
     this.state.pending = [];
     for (const command of queued) {
-      this.apply(command);
+      this.stepResults.push(this.apply(command));
     }
     runSimulationSystems(this.state);
+  }
+
+  takeStepResults(): CommandResult[] {
+    const results = this.stepResults;
+    this.stepResults = [];
+    return results;
   }
 
   getState(): GameState {

@@ -48,6 +48,7 @@ export class GameFacade {
   private primed = false;
   private manual = false;
   private lastTime = 0;
+  private stepResultHandler: ((results: CommandResult[]) => void) | null = null;
 
   constructor() {
     const state = this.engine.getState();
@@ -76,6 +77,7 @@ export class GameFacade {
     for (let i = 0; i < n; i += 1) {
       this.engine.step();
     }
+    this.publishStepResults();
     this.refresh();
     this.renderCallback?.();
   }
@@ -129,6 +131,10 @@ export class GameFacade {
     this.renderCallback = callback;
   }
 
+  registerStepResults(handler: ((results: CommandResult[]) => void) | null): void {
+    this.stepResultHandler = handler;
+  }
+
   start(): void {
     if (this.running) {
       return;
@@ -171,10 +177,16 @@ export class GameFacade {
       const deltaSeconds = Math.max(0, (time - this.lastTime) / 1000);
       this.lastTime = time;
       advanceFrame(this.engine, this.loop, deltaSeconds);
+      this.publishStepResults();
       this.renderCallback?.();
     } else {
       this.lastTime = time;
     }
     this.schedule();
+  }
+
+  private publishStepResults(): void {
+    const results = this.engine.takeStepResults();
+    this.stepResultHandler?.(results);
   }
 }
