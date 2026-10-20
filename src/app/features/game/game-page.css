@@ -65,3 +65,39 @@ section {
   min-width: 0;
   min-height: 0;
 }
+
+.palette button[data-shape]::before {
+  content: '';
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-right: 0.4rem;
+  vertical-align: -0.08rem;
+  background: currentColor;
+}
+
+.palette button[data-shape='circle']::before {
+  border-radius: 50%;
+}
+
+.palette button[data-shape='diamond']::before {
+  transform: rotate(45deg) scale(0.72);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  :host *,
+  section,
+  section * {
+    transition: none;
+    animation: none;
+  }
+}
+
+:host.reduced-motion,
+:host.reduced-motion *,
+section.reduced-motion,
+section.reduced-motion * {
+  transition: none;
+  animation: none;
+}

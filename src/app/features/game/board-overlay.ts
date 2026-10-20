@@ -10,6 +10,8 @@ import {
 import type { CommandResult, RejectReason, TowerState } from '../../core/game/state';
 import { setRangeCircle } from '../../core/render/renderer';
 import { GameFacade } from '../../state/game-facade';
+import { SettingsStore } from '../../state/settings-store';
+import { play } from '../audio/synth';
 
 const PAD_SIZE = 36;
 
@@ -87,6 +89,7 @@ function inspectedFrom(tower: TowerState): InspectedTower {
 export class BoardOverlay {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly facade = inject(GameFacade);
+  private readonly settings = inject(SettingsStore);
   protected readonly pads = padButtons();
   protected readonly selectedType = signal<TowerType | null>(null);
   protected readonly placementError = signal('');
@@ -94,6 +97,7 @@ export class BoardOverlay {
   protected readonly rangeTiles = signal<string | null>(null);
   private readonly hoveredPadId = signal<string | null>(null);
   private readonly focusedPadId = signal<string | null>(null);
+  private readonly awaitingPads = new Map<string, boolean>();
 
   constructor() {
     const destroyRef = inject(DestroyRef);
@@ -118,7 +122,10 @@ export class BoardOverlay {
   }
 
   protected onKeydown(event: KeyboardEvent): void {
-    if (event.currentTarget === document && this.host.nativeElement.contains(event.target as Node)) {
+    if (
+      event.currentTarget === document &&
+      this.host.nativeElement.contains(event.target as Node)
+    ) {
       return;
     }
     const target = event.target;
@@ -256,6 +263,7 @@ export class BoardOverlay {
       const current = this.inspected();
       this.inspected.set(current ? this.towerById(current.id) : null);
     }
+    this.confirmPlaces(results);
   }
 
   private place(padId: string): void {
@@ -266,6 +274,29 @@ export class BoardOverlay {
     }
     const result = this.facade.dispatch({ type: 'placeTower', towerType, padId });
     this.placementError.set(result.ok ? '' : placementMessage(result.reason));
+    if (!result.ok) {
+      return;
+    }
+    if (result.queued) {
+      const occupied = this.facade.getFullState().towers.some((tower) => tower.padId === padId);
+      this.awaitingPads.set(padId, occupied);
+      return;
+    }
+    play('place', this.settings.soundMuted());
+  }
+
+  private confirmPlaces(results: CommandResult[]): void {
+    if (this.awaitingPads.size === 0 || results.length === 0) {
+      return;
+    }
+    const placed = new Set(this.facade.getFullState().towers.map((tower) => tower.padId));
+    const pending = [...this.awaitingPads];
+    this.awaitingPads.clear();
+    for (const [padId, wasOccupied] of pending) {
+      if (!wasOccupied && placed.has(padId)) {
+        play('place', this.settings.soundMuted());
+      }
+    }
   }
 
   private towerOnPad(padId: string): InspectedTower | null {

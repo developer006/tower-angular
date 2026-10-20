@@ -1,6 +1,12 @@
 import { TILE_SIZE } from '../content/types';
-import { drawStatic, type DrawContext } from './background';
-import { PALETTE } from './palette';
+import { clearStaticCache, drawStatic, type DrawContext } from './background';
+import {
+  PALETTE,
+  restoreDefaultPalette,
+  samePalette,
+  writePalette,
+  type MapPalette,
+} from './palette';
 
 export interface CanvasHost {
   getContext(contextId: '2d'): DrawContext | null;
@@ -13,6 +19,11 @@ export interface RangeCircle {
 }
 
 let rangeCircle: RangeCircle | null = null;
+let selectedPalette: MapPalette = PALETTE;
+
+export function useRenderPalette(palette: MapPalette): void {
+  selectedPalette = palette;
+}
 
 export function setRangeCircle(circle: RangeCircle | null): void {
   rangeCircle = circle;
@@ -38,6 +49,7 @@ export function renderMap(
   canvas: CanvasHost | null,
   backingWidth: number,
   backingHeight: number,
+  palette: MapPalette = selectedPalette,
 ): void {
   if (!canvas) {
     return;
@@ -51,6 +63,18 @@ export function renderMap(
   if (!ctx) {
     return;
   }
-  drawStatic(ctx, backingWidth, backingHeight);
-  drawDynamic(ctx);
+  const swapped = !samePalette(PALETTE, palette);
+  if (swapped) {
+    writePalette(PALETTE, palette);
+    clearStaticCache();
+  }
+  try {
+    drawStatic(ctx, backingWidth, backingHeight);
+    drawDynamic(ctx);
+  } finally {
+    if (swapped) {
+      restoreDefaultPalette();
+      clearStaticCache();
+    }
+  }
 }

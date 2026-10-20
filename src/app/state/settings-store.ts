@@ -86,8 +86,10 @@ export class SettingsStore {
   }
 
   recordRunEnd(score: number, bestWave: number): void {
-    const nextScore = isFiniteNumber(score) && score > this.bestScoreValue() ? score : this.bestScoreValue();
-    const nextWave = isFiniteNumber(bestWave) && bestWave > this.bestWaveValue() ? bestWave : this.bestWaveValue();
+    const nextScore =
+      isFiniteNumber(score) && score > this.bestScoreValue() ? score : this.bestScoreValue();
+    const nextWave =
+      isFiniteNumber(bestWave) && bestWave > this.bestWaveValue() ? bestWave : this.bestWaveValue();
     if (nextScore === this.bestScoreValue() && nextWave === this.bestWaveValue()) {
       return;
     }
@@ -98,6 +100,16 @@ export class SettingsStore {
 
   toggleSoundMuted(): void {
     this.soundMutedValue.update((muted) => !muted);
+    this.persist();
+  }
+
+  toggleReducedMotion(): void {
+    this.reducedMotionValue.update((enabled) => !enabled);
+    this.persist();
+  }
+
+  toggleColorblind(): void {
+    this.colorblindValue.update((enabled) => !enabled);
     this.persist();
   }
 

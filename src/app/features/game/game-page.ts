@@ -1,9 +1,11 @@
 import { Component, ElementRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { renderMap } from '../../core/render/renderer';
+import { COLORBLIND_PALETTE, PALETTE } from '../../core/render/palette';
+import { renderMap, useRenderPalette } from '../../core/render/renderer';
 import { nextLiveAnnouncement, type LiveSnapshot } from '../../core/systems/wave';
 import { installHarness } from '../../core/testing/harness-loader';
 import { GameFacade } from '../../state/game-facade';
 import { SettingsStore } from '../../state/settings-store';
+import { play, type SynthCue } from '../audio/synth';
 import { BoardOverlay } from './board-overlay';
 import { GameCanvas } from './game-canvas';
 import { ResultsOverlay } from './results-overlay';
@@ -15,6 +17,9 @@ import { WavePreview } from './wave-preview';
   templateUrl: './game-page.html',
   styleUrl: './game-page.css',
   providers: [GameFacade],
+  host: {
+    '[class.reduced-motion]': 'settings.reducedMotion()',
+  },
 })
 export class GamePage implements OnInit, OnDestroy {
   protected readonly facade = inject(GameFacade);
@@ -27,6 +32,7 @@ export class GamePage implements OnInit, OnDestroy {
   constructor() {
     installHarness(this.facade);
     this.seen = this.snapshot();
+    this.syncPresentation();
     const refresh = this.facade.refresh.bind(this.facade);
     this.facade.refresh = () => {
       refresh();
@@ -50,10 +56,17 @@ export class GamePage implements OnInit, OnDestroy {
       this.hudTimer = null;
     }
     this.facade.stop();
+    document.documentElement.removeAttribute('data-colorblind');
+    useRenderPalette(PALETTE);
   }
 
   protected deployWave(): void {
     this.facade.dispatch({ type: 'startWave' });
+  }
+
+  protected onColorblind(): void {
+    this.settings.toggleColorblind();
+    this.renderBoard();
   }
 
   private snapshot(): LiveSnapshot {
@@ -67,6 +80,7 @@ export class GamePage implements OnInit, OnDestroy {
     const message = nextLiveAnnouncement(this.seen, current);
     if (message !== null) {
       this.liveText.set(message);
+      this.playLiveCue(message);
     } else if (
       (this.seen.phase === 'victory' || this.seen.phase === 'defeat') &&
       current.phase === 'build'
@@ -88,10 +102,47 @@ export class GamePage implements OnInit, OnDestroy {
   }
 
   private renderBoard(): void {
+    this.syncPresentation();
     const canvas = this.host.nativeElement.querySelector('canvas');
     if (!canvas) {
       return;
     }
-    renderMap(canvas, canvas.width, canvas.height);
+    renderMap(
+      canvas,
+      canvas.width,
+      canvas.height,
+      this.settings.colorblind() ? COLORBLIND_PALETTE : PALETTE,
+    );
   }
+
+  private syncPresentation(): void {
+    const colorblind = this.settings.colorblind();
+    if (colorblind) {
+      document.documentElement.setAttribute('data-colorblind', 'true');
+    } else {
+      document.documentElement.removeAttribute('data-colorblind');
+    }
+    useRenderPalette(colorblind ? COLORBLIND_PALETTE : PALETTE);
+  }
+
+  private playLiveCue(message: string): void {
+    const cue = liveCue(message);
+    if (cue === null) {
+      return;
+    }
+    play(cue, this.settings.soundMuted());
+  }
+}
+
+function liveCue(message: string): SynthCue | null {
+  if (message.startsWith('Core hit. Integrity ')) {
+    return 'leak';
+  }
+  if (message === 'Victory. The core holds.') {
+    return 'victory';
+  }
+  if (message === 'Defeat. The core is lost.') {
+    return 'defeat';
+  }
+  return null;
 }
