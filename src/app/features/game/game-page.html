@@ -17,6 +17,15 @@
       <dd data-testid="hud-score">0</dd>
     </div>
   </dl>
+  <div class="hud-controls">
+    <button type="button" data-testid="pause" (click)="facade.togglePaused()">
+      {{ facade.paused() ? 'Paused' : 'Pause' }}
+    </button>
+    <button type="button" data-testid="speed" (click)="facade.toggleSpeed()">{{ facade.speed() }}</button>
+    <button type="button" data-testid="sound-muted" (click)="settings.toggleSoundMuted()">
+      {{ settings.soundMuted() ? 'Muted' : 'Sound' }}
+    </button>
+  </div>
   <div data-testid="live-region" aria-live="polite">{{ liveText() }}</div>
   <app-wave-preview />
   <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()" (click)="deployWave()">Deploy Wave</button>

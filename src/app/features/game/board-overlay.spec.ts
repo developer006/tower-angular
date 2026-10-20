@@ -46,6 +46,8 @@ describe('BoardOverlay', () => {
       dispatchKey(overlay, 'F');
       fixture.detectChanges();
       expect(overlay.getAttribute('data-selected-type')).toBe('pulse');
+      dispatchKey(overlay, ' ');
+      fixture.detectChanges();
 
       dispatchKey(overlay, '2');
       fixture.detectChanges();

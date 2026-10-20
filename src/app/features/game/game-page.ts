@@ -3,6 +3,7 @@ import { renderMap } from '../../core/render/renderer';
 import { nextLiveAnnouncement, type LiveSnapshot } from '../../core/systems/wave';
 import { installHarness } from '../../core/testing/harness-loader';
 import { GameFacade } from '../../state/game-facade';
+import { SettingsStore } from '../../state/settings-store';
 import { BoardOverlay } from './board-overlay';
 import { GameCanvas } from './game-canvas';
 import { ResultsOverlay } from './results-overlay';
@@ -17,6 +18,7 @@ import { WavePreview } from './wave-preview';
 })
 export class GamePage implements OnInit, OnDestroy {
   protected readonly facade = inject(GameFacade);
+  protected readonly settings = inject(SettingsStore);
   protected readonly liveText = signal('');
   private readonly host = inject(ElementRef<HTMLElement>);
   private hudTimer: ReturnType<typeof setInterval> | null = null;
@@ -61,6 +63,7 @@ export class GamePage implements OnInit, OnDestroy {
 
   private publishAnnouncement(): void {
     const current = this.snapshot();
+    this.persistRunEnd(current);
     const message = nextLiveAnnouncement(this.seen, current);
     if (message !== null) {
       this.liveText.set(message);
@@ -71,6 +74,17 @@ export class GamePage implements OnInit, OnDestroy {
       this.liveText.set('');
     }
     this.seen = current;
+  }
+
+  private persistRunEnd(current: LiveSnapshot): void {
+    if (current.phase !== 'victory' && current.phase !== 'defeat') {
+      return;
+    }
+    if (this.seen.phase === 'victory' || this.seen.phase === 'defeat') {
+      return;
+    }
+    const state = this.facade.getFullState();
+    this.settings.recordRunEnd(state.score, state.bestWave ?? 0);
   }
 
   private renderBoard(): void {
