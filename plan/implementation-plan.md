@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-033 merged (`0bdf9d4`). Next brief: `plan/tasks/TASK-034-balance-sim.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-034 merged (`ab44a48`). Next brief: `plan/tasks/TASK-035-balance-tune.md`. Do not hand-author simulator rows.
 
 ## Current repository state
 
