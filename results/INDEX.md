@@ -35,7 +35,8 @@ Last updated: 2026-10-20 (TASK-052 merged)
 | TASK-050 | Visual regression spec and CI baselines | VERIFY-4 | done | `results/TASK-050-visual-regression.md` |
 | TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | done | `results/TASK-051-docs-release.md` |
 | TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 051 | done | `results/TASK-052-github-pages.md` |
-| TASK-053 | Final independent verification and v1 acceptance report | 052 | in-progress | `results/VERIFY-FINAL.md` |
+| TASK-053 | Final independent verification and v1 acceptance report | 052 | blocked | `results/VERIFY-FINAL.md` |
+| TASK-053-FIX | Pin the pause/speed clock to a fixed instant | 053 | in-progress | `results/TASK-053-FIX.md` |
 
 ## Rules
 
@@ -81,3 +82,4 @@ Last updated: 2026-10-20 (TASK-052 merged)
 - TASK-050 done: `8307b62 test(TASK-050): add visual captures and a Linux baseline workflow`, merged as `359a41c`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run e2e` (18 passed). No PNG committed. Baselines come from `visual-baselines.yml` on Ubuntu.
 - TASK-051 done: `2ad61af docs(TASK-051): document setup, tests, and the release checks`, merged as `fa7127c`. Three e2e runs each printed 18 passed. `PROD_ABSENT`. Step average 0.1218 ms. The Ubuntu baseline push lost a race with `main`; the artifact was committed as `69c135e`.
 - TASK-052 done: `6e468ca feat(TASK-052): add the GitHub Pages build and 404 fallback`, merged as `ae474cf`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run build:pages`. Base href `/tower-angular/`. `404.html` identical to `index.html`. `PROD_ABSENT`. Tag `v1.0.0` on `ae474cf` only after VERIFY-FINAL passes.
+- TASK-053 blocked: `npm run e2e` printed 17 passed, 1 failed. `e2e/specs/pause-speed.spec.ts:46` failed with `Cannot fast-forward to the past` because `openClockPlay` reads `Date.now()` after `clock.install()`. Sim, tests, lint, build, pages, and perf passed. Blocked report `ddb4379` was not merged; the branch was deleted. Fix is `plan/tasks/TASK-053-FIX.md`. Do not tag `v1.0.0`.
