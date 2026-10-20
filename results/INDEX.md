@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-023-FIX merged)
+Last updated: 2026-10-20 (phase-2 tagged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -18,8 +18,8 @@ Last updated: 2026-10-20 (TASK-023-FIX merged)
 | TASK-021 | Placement validation, economy, HUD, error messages | 020 | done | `results/TASK-021-placement-economy.md` |
 | TASK-022 | Tower palette, range preview, inspector, upgrade/sell/targeting | 021 | done | `results/TASK-022-palette-inspector.md` |
 | TASK-023 | E2E specs: placement, invalid placement, upgrade/sell, keyboard | 022 | done | `results/TASK-023-FIX.md` |
-| VERIFY-2 | Phase 2 verification | 023 | in-progress | `results/VERIFY-PHASE-2.md` |
-| TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | pending | `results/TASK-030-enemy-movement.md` |
+| VERIFY-2 | Phase 2 verification | 023 | done | `results/VERIFY-PHASE-2.md` |
+| TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | in-progress | `results/TASK-030-enemy-movement.md` |
 | TASK-031 | Targeting, firing, projectiles, armor/slow + tests | 030 | pending | `results/TASK-031-combat.md` |
 | TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | pending | `results/TASK-032-waves-endstates.md` |
 | TASK-033 | E2E specs: combat, leak, defeat, victory | 032 | pending | `results/TASK-033-combat-e2e.md` |
@@ -62,3 +62,4 @@ Last updated: 2026-10-20 (TASK-023-FIX merged)
 - TASK-022 done: `bfaf8cb feat(TASK-022): add palette, range preview, and inspector`, merged as `835d7a2`. Orchestrator re-ran `npm test` (54 passed), lint, build, and `npm run e2e` (2 passed). Refund oracles 49 and 84 are in the spec. `NO_SHADOW`.
 - TASK-023 blocked before commit. Queued `placeTower` clears `placement-error` before `step()` rejects it. Fix is `plan/tasks/TASK-023-FIX.md`. Do not weaken the oracle to an empty string.
 - TASK-023-FIX done: `003bb1b fix(TASK-023): show apply-time placement rejections`, merged as `d87761e`. Orchestrator re-ran `npm test` (55 passed), lint, and `npm run e2e` (5 passed: shell, smoke, build, upgrade-sell, L1 sell). Gold oracles 114 and 129 held.
+- VERIFY-2 done: `047abdd docs(VERIFY-2): record phase 2 verification`, merged as `3ee9a2e`. Tagged `phase-2`.
