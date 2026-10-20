@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-030 merged)
+Last updated: 2026-10-20 (TASK-031 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -20,8 +20,8 @@ Last updated: 2026-10-20 (TASK-030 merged)
 | TASK-023 | E2E specs: placement, invalid placement, upgrade/sell, keyboard | 022 | done | `results/TASK-023-FIX.md` |
 | VERIFY-2 | Phase 2 verification | 023 | done | `results/VERIFY-PHASE-2.md` |
 | TASK-030 | Enemy content, spawn queue, path movement, leak detection | VERIFY-2 | done | `results/TASK-030-enemy-movement.md` |
-| TASK-031 | Targeting, firing, projectiles, armor/slow + tests | 030 | in-progress | `results/TASK-031-combat.md` |
-| TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | pending | `results/TASK-032-waves-endstates.md` |
+| TASK-031 | Targeting, firing, projectiles, armor/slow + tests | 030 | done | `results/TASK-031-combat.md` |
+| TASK-032 | 10-wave data, wave state machine, victory/defeat, results overlay (score + Retry) | 031 | in-progress | `results/TASK-032-waves-endstates.md` |
 | TASK-033 | E2E specs: combat, leak, defeat, victory | 032 | pending | `results/TASK-033-combat-e2e.md` |
 | TASK-034 | Headless balance simulator + reference strategies | 033 | pending | `results/TASK-034-balance-sim.md` |
 | TASK-035 | Balance pass and content tuning | 034 | pending | `results/TASK-035-balance-tune.md` |
@@ -64,3 +64,4 @@ Last updated: 2026-10-20 (TASK-030 merged)
 - TASK-023-FIX done: `003bb1b fix(TASK-023): show apply-time placement rejections`, merged as `d87761e`. Orchestrator re-ran `npm test` (55 passed), lint, and `npm run e2e` (5 passed: shell, smoke, build, upgrade-sell, L1 sell). Gold oracles 114 and 129 held.
 - VERIFY-2 done: `047abdd docs(VERIFY-2): record phase 2 verification`, merged as `3ee9a2e`. Tagged `phase-2`.
 - TASK-030 done: `17385b4 feat(TASK-030): spawn waves, move enemies, and apply leaks`, merged as `95d25f4`. Orchestrator re-ran `npm test` (62 passed), lint, and `npm run e2e` (5 passed). Second drone at elapsed tick 48. Leak pays no bounty.
+- TASK-031 done: `548bd76 feat(TASK-031): add targeting, projectiles, armor, and slow`, merged as `ce01ce7`. Orchestrator re-ran `npm test` (74 passed), lint, and `npm run e2e` (5 passed). Pulse versus Tank deals 8. Kill bounty does not change score.
