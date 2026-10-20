@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start:e2e": "ng serve --configuration e2e",
     "build": "ng build",
+    "build:pages": "ng build --base-href=/tower-angular/ && node scripts/copy-404.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "test:watch": "ng test --watch",
@@ -13,7 +14,8 @@
     "e2e:ui": "playwright test --ui",
     "e2e:serve": "ng build --configuration e2e && http-server dist/tower-angular/browser -p 4200 -c-1 --proxy http://localhost:4200?",
     "lint": "ng lint",
-    "sim": "tsx scripts/balance-sim.ts"
+    "sim": "tsx scripts/balance-sim.ts",
+    "copy404": "node scripts/copy-404.mjs"
   },
   "private": true,
   "packageManager": "npm@11.19.0",

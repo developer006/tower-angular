@@ -16,6 +16,8 @@ Angular 22 workspace for Core Defense. Dark theme by default.
 - `npm run e2e` — run the 18 Playwright tests
 - `npm run sim` — run the headless balance simulator
 - `npm run build` — production build
+- `npm run build:pages` — production build with base href `/tower-angular/` and the 404 fallback
+- `npm run copy404` — copy the built `index.html` to `404.html`
 
 ## Architecture
 
