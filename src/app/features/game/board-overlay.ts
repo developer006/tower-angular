@@ -143,6 +143,16 @@ export class BoardOverlay {
         this.selectedType.set(null);
         this.publishRange();
         return;
+      case ' ':
+      case 'Spacebar':
+        event.preventDefault();
+        this.facade.togglePaused();
+        return;
+      case 'f':
+      case 'F':
+        event.preventDefault();
+        this.facade.toggleSpeed();
+        return;
       default:
         return;
     }
