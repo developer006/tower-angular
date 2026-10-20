@@ -14,6 +14,8 @@ declare global {
 
 const SLICE_MS = 16;
 const SPEED_SLICES = 24;
+const CLOCK_START = new Date('2026-01-01T00:00:00Z');
+const READY_SLICES = 400;
 
 test('pause freezes tick and does not dump paused time on resume', async ({ page }) => {
   await openClockPlay(page);
@@ -54,19 +56,17 @@ test('2x advances about twice as far', async ({ page }) => {
 });
 
 async function openClockPlay(page: Page): Promise<void> {
-  await page.clock.install();
-  await page.clock.pauseAt(Date.now());
+  await page.clock.install({ time: CLOCK_START });
+  await page.clock.pauseAt(CLOCK_START);
   await page.goto('/play');
-  const deadline = Date.now() + 20_000;
-  while (Date.now() < deadline) {
+  for (let attempt = 0; attempt < READY_SLICES; attempt += 1) {
     const ready = await page.evaluate(() => window.__TD__?.ready === true);
     if (ready) {
       return;
     }
     await page.clock.runFor(SLICE_MS);
-    await new Promise((resolve) => setTimeout(resolve, 50));
   }
-  throw new Error('harness did not become ready');
+  throw new Error(`harness did not become ready after ${READY_SLICES} slices`);
 }
 
 async function readLoop(page: Page): Promise<{ tick: number; accumulator: number }> {
