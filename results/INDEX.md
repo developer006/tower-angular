@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-050 merged)
+Last updated: 2026-10-20 (TASK-051 merged, Linux baselines committed)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -33,8 +33,8 @@ Last updated: 2026-10-20 (TASK-050 merged)
 | TASK-044 | E2E specs: pause/speed, persistence, accessibility | 043 | done | `results/TASK-044-polish-e2e.md` |
 | VERIFY-4 | Phase 4 verification | 044 | done | `results/VERIFY-PHASE-4.md` |
 | TASK-050 | Visual regression spec and CI baselines | VERIFY-4 | done | `results/TASK-050-visual-regression.md` |
-| TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | in-progress | `results/TASK-051-docs-release.md` |
-| TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow | 051 | pending | `results/TASK-052-github-pages.md` |
+| TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | done | `results/TASK-051-docs-release.md` |
+| TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 051 | in-progress | `results/TASK-052-github-pages.md` |
 | TASK-053 | Final independent verification and v1 acceptance report | 052 | pending | `results/VERIFY-FINAL.md` |
 
 ## Rules
@@ -79,3 +79,4 @@ Last updated: 2026-10-20 (TASK-050 merged)
 - TASK-044 done: `b8ac3dd test(TASK-044): cover pause, persistence, and accessibility`, merged as `1e3abbd`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run e2e` (18 passed). Tag `phase-4` on `1e3abbd` only after VERIFY-4 passes.
 - VERIFY-4 done: `27105b1 docs(VERIFY-4): record phase 4 verification`, merged as `b77969c`. Tagged `phase-4` on `1e3abbd`. Sim rows matched this run: single-type `bestWave=6`, mixed seed 1 victory integrity 11. `npm run e2e` 18 passed.
 - TASK-050 done: `8307b62 test(TASK-050): add visual captures and a Linux baseline workflow`, merged as `359a41c`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run e2e` (18 passed). No PNG committed. Baselines come from `visual-baselines.yml` on Ubuntu.
+- TASK-051 done: `2ad61af docs(TASK-051): document setup, tests, and the release checks`, merged as `fa7127c`. Three e2e runs each printed 18 passed. `PROD_ABSENT`. Step average 0.1218 ms. The Ubuntu baseline push lost a race with `main`; the artifact was committed as `69c135e`.
