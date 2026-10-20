@@ -35,7 +35,13 @@ describe('SettingsStore', () => {
   it('loads defaults when bestScore has the wrong type and does not throw', () => {
     localStorage.setItem(
       SETTINGS_STORAGE_KEY,
-      JSON.stringify({ bestScore: 'nope', bestWave: 4, soundMuted: true, reducedMotion: true, colorblind: true }),
+      JSON.stringify({
+        bestScore: 'nope',
+        bestWave: 4,
+        soundMuted: true,
+        reducedMotion: true,
+        colorblind: true,
+      }),
     );
     const store = expectNoThrow();
     expect(store.bestScore()).toBe(0);
@@ -54,10 +60,34 @@ describe('SettingsStore', () => {
     store.load();
     expect(store.bestScore()).toBe(100);
     expect(store.bestWave()).toBe(2);
-    const saved = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? '{}') as Record<string, unknown>;
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? '{}') as Record<
+      string,
+      unknown
+    >;
     expect(saved['bestScore']).toBe(100);
     expect(saved).not.toHaveProperty('theme');
     expect(localStorage.getItem('theme')).not.toBe(SETTINGS_STORAGE_KEY);
+  });
+
+  it('writes reduced motion and colorblind booleans and leaves theme unchanged', () => {
+    localStorage.setItem('theme', 'deeppurple-amber');
+    const store = TestBed.inject(SettingsStore);
+    store.toggleReducedMotion();
+    store.toggleColorblind();
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) ?? '{}') as Record<
+      string,
+      unknown
+    >;
+    expect(saved['reducedMotion']).toBe(true);
+    expect(saved['colorblind']).toBe(true);
+    expect(typeof saved['reducedMotion']).toBe('boolean');
+    expect(typeof saved['colorblind']).toBe('boolean');
+    expect(saved).not.toHaveProperty('theme');
+    expect(localStorage.getItem('theme')).toBe('deeppurple-amber');
+    store.load();
+    expect(store.reducedMotion()).toBe(true);
+    expect(store.colorblind()).toBe(true);
+    expect(localStorage.getItem('theme')).toBe('deeppurple-amber');
   });
 });
 

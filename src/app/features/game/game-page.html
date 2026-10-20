@@ -1,4 +1,4 @@
-<section data-testid="game-page">
+<section data-testid="game-page" [class.reduced-motion]="settings.reducedMotion()">
   <dl class="hud">
     <div>
       <dt>Integrity</dt>
@@ -25,18 +25,41 @@
     <button type="button" data-testid="sound-muted" (click)="settings.toggleSoundMuted()">
       {{ settings.soundMuted() ? 'Muted' : 'Sound' }}
     </button>
+    <button type="button" data-testid="reduced-motion" (click)="settings.toggleReducedMotion()">
+      {{ settings.reducedMotion() ? 'Reduced' : 'Motion' }}
+    </button>
+    <button type="button" data-testid="colorblind" (click)="onColorblind()">
+      {{ settings.colorblind() ? 'Colorblind' : 'Colors' }}
+    </button>
   </div>
   <div data-testid="live-region" aria-live="polite">{{ liveText() }}</div>
   <app-wave-preview />
   <button type="button" data-testid="deploy-wave" [disabled]="facade.paused()" (click)="deployWave()">Deploy Wave</button>
   <div class="palette">
-    <button type="button" data-testid="palette-pulse" (click)="overlay.selectType('pulse')">
+    <button
+      type="button"
+      data-testid="palette-pulse"
+      data-shape="circle"
+      (click)="overlay.selectType('pulse')"
+    >
       Pulse 70
     </button>
-    <button type="button" data-testid="palette-mortar" (click)="overlay.selectType('mortar')">
+    <button
+      type="button"
+      data-testid="palette-mortar"
+      data-shape="square"
+      (click)="overlay.selectType('mortar')"
+    >
       Mortar 110
     </button>
-    <button type="button" data-testid="palette-cryo" (click)="overlay.selectType('cryo')">Cryo 90</button>
+    <button
+      type="button"
+      data-testid="palette-cryo"
+      data-shape="diamond"
+      (click)="overlay.selectType('cryo')"
+    >
+      Cryo 90
+    </button>
   </div>
   <div class="board-stage">
     <div class="board-frame">
