@@ -337,7 +337,10 @@ describe('fixed-step engine', () => {
     expect(state.wave).toBe(1);
     expect(state.integrity).toBe(20);
     expect(state.score).toBe(0);
-    expect(state.enemies).toEqual([]);
+    expect(state.enemies).toHaveLength(8);
+    expect(state.enemies.every((enemy) => enemy.alive && enemy.distanceAlongPath < 2064)).toBe(
+      true,
+    );
     expect(state.projectiles).toEqual([]);
     expect(state.effects).toEqual([]);
     expect(state.spawnQueue).toEqual([]);
