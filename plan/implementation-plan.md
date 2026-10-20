@@ -4,7 +4,7 @@
 > **Plan root:** `C:\wrk\tower-angular\plan`
 > **Results hub:** `C:\wrk\tower-angular\results`
 > **Remote:** `https://github.com/developer006/tower-angular.git`
-> **Status:** TASK-051 merged (`fa7127c`). Linux visual baselines are `69c135e`. Next brief: `plan/tasks/TASK-052-github-pages.md`. Do not reverse the harness `fileReplacements`.
+> **Status:** TASK-052 merged (`ae474cf`). Next: `plan/tasks/TASK-053-final.md`. Do not tag `v1.0.0` until `results/VERIFY-FINAL.md` has `status: pass`. Do not reverse the harness `fileReplacements`.
 
 ## Current repository state
 

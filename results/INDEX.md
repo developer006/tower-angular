@@ -2,7 +2,7 @@
 
 Status legend: `pending` | `in-progress` | `blocked` | `verify` | `done`
 
-Last updated: 2026-10-20 (TASK-051 merged, Linux baselines committed)
+Last updated: 2026-10-20 (TASK-052 merged)
 
 | ID | Task | Depends on | Status | Result |
 |---|---|---|---|---|
@@ -34,8 +34,8 @@ Last updated: 2026-10-20 (TASK-051 merged, Linux baselines committed)
 | VERIFY-4 | Phase 4 verification | 044 | done | `results/VERIFY-PHASE-4.md` |
 | TASK-050 | Visual regression spec and CI baselines | VERIFY-4 | done | `results/TASK-050-visual-regression.md` |
 | TASK-051 | Docs, README, performance/flake/bundle checks, release checklist | 050 | done | `results/TASK-051-docs-release.md` |
-| TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 051 | in-progress | `results/TASK-052-github-pages.md` |
-| TASK-053 | Final independent verification and v1 acceptance report | 052 | pending | `results/VERIFY-FINAL.md` |
+| TASK-052 | GitHub Pages deploy: base-href, 404 fallback, deploy workflow, smoke check | 051 | done | `results/TASK-052-github-pages.md` |
+| TASK-053 | Final independent verification and v1 acceptance report | 052 | in-progress | `results/VERIFY-FINAL.md` |
 
 ## Rules
 
@@ -80,3 +80,4 @@ Last updated: 2026-10-20 (TASK-051 merged, Linux baselines committed)
 - VERIFY-4 done: `27105b1 docs(VERIFY-4): record phase 4 verification`, merged as `b77969c`. Tagged `phase-4` on `1e3abbd`. Sim rows matched this run: single-type `bestWave=6`, mixed seed 1 victory integrity 11. `npm run e2e` 18 passed.
 - TASK-050 done: `8307b62 test(TASK-050): add visual captures and a Linux baseline workflow`, merged as `359a41c`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run e2e` (18 passed). No PNG committed. Baselines come from `visual-baselines.yml` on Ubuntu.
 - TASK-051 done: `2ad61af docs(TASK-051): document setup, tests, and the release checks`, merged as `fa7127c`. Three e2e runs each printed 18 passed. `PROD_ABSENT`. Step average 0.1218 ms. The Ubuntu baseline push lost a race with `main`; the artifact was committed as `69c135e`.
+- TASK-052 done: `6e468ca feat(TASK-052): add the GitHub Pages build and 404 fallback`, merged as `ae474cf`. Orchestrator re-ran `npm test` (105 passed), lint, and `npm run build:pages`. Base href `/tower-angular/`. `404.html` identical to `index.html`. `PROD_ABSENT`. Tag `v1.0.0` on `ae474cf` only after VERIFY-FINAL passes.
