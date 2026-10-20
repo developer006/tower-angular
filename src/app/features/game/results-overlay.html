@@ -1,0 +1,10 @@
+@if (view().ended) {
+  <section class="results-overlay" data-testid="results-overlay">
+    <h2>Results</h2>
+    <p>Waves cleared {{ view().wavesCleared }}</p>
+    <p>Kills {{ view().kills }}</p>
+    <p>Integrity {{ view().integrity }}</p>
+    <p>Score {{ view().score }}</p>
+    <button type="button" data-testid="retry" (click)="retry()">Retry</button>
+  </section>
+}

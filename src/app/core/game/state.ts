@@ -54,6 +54,12 @@ export interface GameState {
   integrity: number;
   wave: number;
   score: number;
+  /** Kills this run. A kill does not change score. */
+  kills?: number;
+  /** Fully cleared waves. A defeat during wave N leaves this at N-1. */
+  wavesCleared?: number;
+  /** Highest 1-based wave started. Reset sets this to 0. */
+  bestWave?: number;
   towers: TowerState[];
   enemies: EnemyState[];
   projectiles: ProjectileState[];

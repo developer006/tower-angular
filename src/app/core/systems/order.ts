@@ -6,8 +6,9 @@ import { moveEnemies } from './movement';
 import { moveProjectiles } from './projectiles';
 import { spawnDue } from './spawn';
 import { acquireTargets } from './targeting';
+import { advanceWave } from './wave';
 
-export { applyDamage, acquireTargets, fireTowers, moveEnemies, moveProjectiles, spawnDue };
+export { advanceWave, applyDamage, acquireTargets, fireTowers, moveEnemies, moveProjectiles, spawnDue };
 
 export function tickSlow(state: GameState): void {
   for (const enemy of state.enemies) {
@@ -21,10 +22,6 @@ export function tickSlow(state: GameState): void {
       enemy.slowStrength = 0;
     }
   }
-}
-
-export function advanceWave(state: GameState): void {
-  void state;
 }
 
 export function tickEffects(state: GameState): void {
